@@ -23,7 +23,25 @@
                 <a href="#contato" class="nav-link">Contato</a>
             </nav>
             <div class="login-btn">
-                <a href="#login" class="btn-login">Login</a>
+                <button class="btn-login" id="btn-login-modal">
+                    <i class="fa-regular fa-circle-user"></i>
+                    Login
+                </button>
+            </div>
+
+            <!-- Modal de Login -->
+            <div class="modal-login" id="modal-login">
+                <div class="conteudo-modal-login">
+                    <button class="fechar-modal" id="fechar-modal">&times;</button>
+                    <div class="icone-usuario-modal">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <h2 class="titulo-modal-login">OLÁ! É MUITO BOM<br>TER VOCÊ POR AQUI.</h2>
+                    <div class="botoes-modal-login">
+                        <button class="btn-fazer-login" onclick="window.location.href='login.html'">FAZER LOGIN</button>
+                        <button class="btn-criar-conta" onclick="window.location.href='cadastro.html'">CRIAR CONTA</button>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -138,6 +156,8 @@
             </div>
         </div>
     </footer>
+
+    <script src = "../public/js/script.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ALUCAR</title>
+    <link rel="icon" href="../public/images/logosemfundo.png" type="image/png">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container-login-geral">
+        <!-- Lado Esquerdo - Logo -->
+        <div class="lado-esquerdo-login">
+            <div class="conteiner-logo-login">
+                <img src="../public/images/logo.png" alt="ALUCAR Logo" class="logo-login">
+            </div>
+        </div>
+
+        <!-- Lado Direito - Formulário -->
+        <div class="lado-direito-login">
+            <button class="fechar-login">&times;</button>
+
+            <div class="formulario-login-container">
+                <h1 class="titulo-formulario-login">Faça Login na sua conta</h1>
+
+                <!-- Login com Google -->
+                <button class="btn-google-login">
+                    <i class="fab fa-google"></i>
+                    Continue com Google
+                </button>
+
+                <p class="texto-alternativo-login">ou faça login com seu email</p>
+
+                <!-- Formulário -->
+                <form class="form-login" id="form-login">
+                    <div class="grupo-input-login">
+                        <label for="email-login" class="label-login">Email</label>
+                        <input type="email" id="email-login" name="email" class="input-login" placeholder="mail@abc.com" required>
+                    </div>
+
+                    <div class="grupo-input-login">
+                        <label for="senha-login" class="label-login">Passsword</label>
+                        <input type="password" id="senha-login" name="password" class="input-login" placeholder="••••••••••••••" required>
+                    </div>
+
+                    <div class="opcoes-login">
+                        <label class="checkbox-login">
+                            <input type="checkbox" name="lembrar" id="lembrar-login">
+                            <span>Lembrar Login</span>
+                        </label>
+                        <a href="#esqueceu" class="link-esqueceu">Esqueceu sua senha?</a>
+                    </div>
+
+                    <button type="submit" class="btn-fazer-login-form">Login</button>
+                </form>
+
+                <!-- Link Cadastro -->
+                <p class="texto-cadastro-login">
+                    Não tem login? <a href="#cadastro" class="link-cadastro">Faça seu cadastro</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <script src = "../public/js/script.js"></script>
+</body>
+
+</html>
