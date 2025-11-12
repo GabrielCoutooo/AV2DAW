@@ -4,11 +4,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ALUCAR - Alugue Fácil, Viaje Longe</title>
+    <link rel="icon" href="../public/images/logosemfundo.png" type="image/png">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-    <h1>Teste</h1>
+    <!-- Header/Navbar -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <img src="../public/images/logo.png" alt="ALUCAR Logo" class="logo-img">
+            </div>
+            <nav class="nav-links">
+                <a href="#inicio" class="nav-link">Início</a>
+                <a href="#servicos" class="nav-link">Serviços</a>
+                <a href="#contato" class="nav-link">Contato</a>
+            </nav>
+            <div class="login-btn">
+                <a href="#login" class="btn-login">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner Principal -->
+    <section class="banner-principal">
+        <div class="conteudo-banner">
+            <h1 class="titulo-banner">ALUGUE FÁCIL, VIAJE LONGE!</h1>
+        </div>
+    </section>
+
+    <!-- Seção de Busca -->
+    <section class="secao-busca">
+        <div class="container-busca">
+            <h2 class="titulo-busca">VERIFIQUE OS MODELOS DISPONÍVEIS!</h2>
+            <form class="formulario-busca">
+                <div class="grupo-formulario">
+                    <label for="retirada">Retirada</label>
+                    <div class="linha-formulario">
+                        <input type="radio" id="retirada" name="tipo" value="retirada" checked>
+                        <label for="retirada" class="label-radio">Retirada</label>
+                    </div>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="devolucao">Devolução</label>
+                    <div class="linha-formulario">
+                        <input type="radio" id="devolucao" name="tipo" value="devolucao">
+                        <label for="devolucao" class="label-radio">Devolução</label>
+                    </div>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="data">Data</label>
+                    <input type="date" id="data" name="data" class="entrada-formulario">
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="horario">Horário</label>
+                    <input type="time" id="horario" name="horario" class="entrada-formulario">
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="modelos">Modelos</label>
+                    <select id="modelos" name="modelos" class="entrada-formulario">
+                        <option value="">Selecione um modelo...</option>
+                    </select>
+                </div>
+
+                <div class="grupo-formulario">
+                    <input type="search" id="pesquisa" name="pesquisa" placeholder="Digite sua pesquisa..." class="entrada-pesquisa">
+                </div>
+
+                <button type="submit" class="botao-busca">
+                    <span class="icone-botao">✓</span>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Dimensões do veículo -->
+    <section class="secao-dimensoes">
+        
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="container-footer">
+            <!-- Logo Section -->
+            <div class="secao-logo-footer">
+                <img src="../public/images/logo.png" alt="ALUCAR Logo" class="logo-footer">
+            </div>
+
+            <!-- Sobre Nós -->
+            <div class="coluna-footer">
+                <h3 class="titulo-coluna-footer">Sobre Nós</h3>
+                <ul class="lista-footer">
+                    <li><a href="#como-funciona" class="link-footer">Como funciona</a></li>
+                    <li><a href="#carros-populares" class="link-footer">Carros Populares</a></li>
+                    <li><a href="#parcerias" class="link-footer">Parcerias</a></li>
+                    <li><a href="#duvidas" class="link-footer">Dúvidas Frequentes</a></li>
+                </ul>
+            </div>
+
+            <!-- Comunidade -->
+            <div class="coluna-footer">
+                <h3 class="titulo-coluna-footer">Comunidade</h3>
+                <ul class="lista-footer">
+                    <li><a href="#eventos" class="link-footer">Eventos</a></li>
+                    <li><a href="#convide-amigo" class="link-footer">Convide um Amigo</a></li>
+                    <li><a href="#trabalhe-conosco" class="link-footer">Trabalhe Conosco</a></li>
+                </ul>
+            </div>
+
+            <!-- Redes Sociais -->
+            <div class="coluna-footer">
+                <h3 class="titulo-coluna-footer">Redes Sociais</h3>
+                <ul class="lista-footer">
+                    <li><a href="#instagram" class="link-footer">Instagram <i class="fab fa-instagram"></i></a></li>
+                    <li><a href="#facebook" class="link-footer">Facebook <i class="fab fa-facebook"></i></a></li>
+                    <li><a href="#linkedin" class="link-footer">LinkedIn <i class="fab fa-linkedin"></i></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Rodapé Bottom -->
+        <div class="footer-bottom">
+            <p class="copyright">&copy;2025 ALUCAR. Todos os direitos reservados.</p>
+            <div class="links-legais">
+                <a href="#politica" class="link-legal">Política & Privacidade</a>
+                <a href="#termos" class="link-legal">Termos e Condições</a>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>
