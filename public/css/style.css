@@ -733,3 +733,73 @@ body.modal-aberto {
         height: 200px;
     }
 }
+/* ===== Página de Registro ===== */
+.container-cadastro {
+  max-width: 1000px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  font-family: 'Poppins', sans-serif;
+}
+
+.titulo-cadastro {
+  text-align: left;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.form-cadastro h2 {
+  margin-top: 30px;
+  color: #333;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 5px;
+}
+
+.linha-campos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.grupo-input {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.grupo-input label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.grupo-input input, .grupo-input select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.btn-cadastro {
+  margin-top: 25px;
+  width: 200px;
+  background-color: #0056d2;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-cadastro:hover {
+  background-color: #0041a8;
+}
+
+.mensagem-feedback {
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
+}

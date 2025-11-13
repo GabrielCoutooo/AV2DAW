@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - ALUCAR</title>
+    <link rel="icon" href="../../public/images/logosemfundo.png" type="image/png">
+    <link rel="stylesheet" href="../../public/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="container-cadastro">
+        <h1 class="titulo-cadastro">Crie sua conta</h1>
+
+        <form id="form-cadastro" class="form-cadastro">
+            <h2>Dados Pessoais</h2>
+            <div class="linha-campos">
+                <div class="grupo-input">
+                    <label>Tratamento:</label>
+                    <div class="radio-tratamento">
+                        <label><input type="radio" name="tratamento" value="Sr."> Sr.</label>
+                        <label><input type="radio" name="tratamento" value="Sra."> Sra.</label>
+                    </div>
+                </div>
+                <div class="grupo-input">
+                    <label>Nome do Locatário:</label>
+                    <input type="text" name="nome" placeholder="Insira seu primeiro nome" required>
+                </div>
+                <div class="grupo-input">
+                    <label>Sobrenome:</label>
+                    <input type="text" name="sobrenome" placeholder="Insira seu sobrenome" required>
+                </div>
+            </div>
+
+            <div class="linha-campos">
+                <div class="grupo-input">
+                    <label>País de Residência:</label>
+                    <select name="pais" required>
+                        <option value="">Selecione o país de sua residência</option>
+                        <option value="Brasil">Brasil</option>
+                        <option value="Portugal">Portugal</option>
+                    </select>
+                </div>
+                <div class="grupo-input">
+                    <label>Telefone:</label>
+                    <input type="tel" name="telefone" placeholder="Digite seu número sem hífen" required>
+                </div>
+                <div class="grupo-input">
+                    <label>Habilitação:</label>
+                    <input type="text" name="habilitacao" placeholder="Insira sua habilitação de CARRO" required>
+                </div>
+                <div class="grupo-input">
+                    <label>CPF:</label>
+                    <input type="text" name="cpf" placeholder="Digite seu CPF" required>
+                </div>
+            </div>
+
+            <h2>Dados de Acesso</h2>
+            <div class="linha-campos">
+                <div class="grupo-input">
+                    <label>Email:</label>
+                    <input type="email" name="email" placeholder="Insira seu melhor email" required>
+                </div>
+                <div class="grupo-input">
+                    <label>Confirme seu Email:</label>
+                    <input type="email" name="confirmar_email" placeholder="Confirme seu melhor email" required>
+                </div>
+            </div>
+
+            <div class="linha-campos">
+                <div class="grupo-input">
+                    <label>Senha de acesso:</label>
+                    <input type="password" name="senha" placeholder="Crie uma senha forte" required>
+                </div>
+                <div class="grupo-input">
+                    <label>Confirme a Senha de acesso:</label>
+                    <input type="password" name="confirmar_senha" placeholder="Confirme sua senha" required>
+                </div>
+            </div>
+
+            <p id="mensagem-cadastro" class="mensagem-feedback"></p>
+            <button type="submit" class="btn-cadastro">Fazer Cadastro</button>
+        </form>
+    </div>
+
+    <script src="../../public/js/register.js"></script>
+</body>
+
+</html>

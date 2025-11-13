@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const dados = new FormData(form);
     try {
-      const resposta = await fetch("../public/login.php", {
+      const resposta = await fetch("../../public/login.php", {
         method: "POST",
         body: dados,
       });

@@ -48,6 +48,6 @@ if (!empty($_POST['lembrar'])) {
 echo json_encode([
     'success' => true,
     'message' => 'Login realizado com sucesso!',
-    'redirect' => BASE_URL . 'index.html'
+    'redirect' => '../client/index.html'
 ]);
 exit;

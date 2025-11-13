@@ -22,11 +22,9 @@
                 <a href="#servicos" class="nav-link">Serviços</a>
                 <a href="#contato" class="nav-link">Contato</a>
             </nav>
-            <div class="login-btn">
-                <button class="btn-login" id="btn-login-modal">
-                    <i class="fa-regular fa-circle-user"></i>
-                    Login
-                </button>
+            <!-- Este container será preenchido dinamicamente pelo JavaScript -->
+            <div class="login-btn" id="user-auth-container">
+                <!-- Pode deixar um loader aqui se quiser -->
             </div>
 
             <!-- Modal de Login -->
@@ -39,7 +37,8 @@
                     <h2 class="titulo-modal-login">OLÁ! É MUITO BOM<br>TER VOCÊ POR AQUI.</h2>
                     <div class="botoes-modal-login">
                         <button class="btn-fazer-login" onclick="window.location.href='login.html'">FAZER LOGIN</button>
-                        <button class="btn-criar-conta" onclick="window.location.href='cadastro.html'">CRIAR CONTA</button>
+                        <button class="btn-criar-conta" onclick="window.location.href='register.html'">CRIAR
+                            CONTA</button>
                     </div>
                 </div>
             </div>
@@ -92,7 +91,8 @@
                 </div>
 
                 <div class="grupo-formulario">
-                    <input type="search" id="pesquisa" name="pesquisa" placeholder="Digite sua pesquisa..." class="entrada-pesquisa">
+                    <input type="search" id="pesquisa" name="pesquisa" placeholder="Digite sua pesquisa..."
+                        class="entrada-pesquisa">
                 </div>
 
                 <button type="submit" class="botao-busca">
@@ -104,7 +104,7 @@
 
     <!-- Dimensões do veículo -->
     <section class="secao-dimensoes">
-        
+
     </section>
 
     <!-- Rodapé -->
@@ -157,7 +157,8 @@
         </div>
     </footer>
 
-    <script src = "../public/js/script.js"></script>
+    <script src="../../public/js/script.js"></script>
+    <script src="../../public/js/auth-header.js"></script>
 </body>
 
 </html>

@@ -6,10 +6,8 @@
  * Responsável por gerenciar o estado de login do usuário e fornecer
  * funções auxiliares para verificação de autenticação em todo o sistema
  */
-// Verificando se a sessão já não está ativa e iniciando-a para acesso as variáveis de autenticação
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// Inclui o arquivo de configuração principal, que já cuida de iniciar a sessão
+require_once __DIR__ . '/config.php';
 /**
  * Verifica se o usuário está autenticado no sistema
  * 

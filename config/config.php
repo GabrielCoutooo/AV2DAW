@@ -1,5 +1,5 @@
 <?php
-<<<<<<< HEAD
+
 // CONFIGURAÇÕES GERAIS
 define('NOME_SITE', 'alucar');
 define('EMAIL_CONTATO', 'gabrielccsilva@gmail.com');
@@ -38,17 +38,3 @@ session_set_cookie_params([
 ]);
 session_name(SESSION_NAME);
 session_start();
-=======
-$host = 'localhost';
-$dbname = 'Alucar';
-$username = 'root';
-$password = '';
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch(PDOException $e) {
-    die("Erro na conexão: " . $e->getMessage());
-}
-?>
->>>>>>> 61264e6c8e9ca33f20177fd99364553fa9ad8be5
