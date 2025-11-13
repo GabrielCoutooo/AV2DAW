@@ -1,20 +1,13 @@
 <?php
 $host = 'localhost';
-$user = 'root';
+$dbname = 'Alucar';
+$username = 'root';
 $password = '';
-$database = 'alucar';
 
 try {
-    $conexao = new mysqli($host, $user, $password, $database);
-    
-    if ($conexao->connect_error) {
-        throw new Exception('Erro na conexão: ' . $conexao->connect_error);
-    }
-    
-    $conexao->set_charset('utf8');
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(['erro' => $e->getMessage()]);
-    exit;
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    die("Erro na conexão: " . $e->getMessage());
 }
 ?>
