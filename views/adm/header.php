@@ -1,10 +1,13 @@
 <?php
-// Iniciar sessão para verificar se o usuário está logado como admin
+// Inicia a sessão (se não estiver iniciada pelo config.php)
 session_start();
-// if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
-//     header('Location: ../client/login.html');
-//     exit();
-// }
+
+// VERIFICAÇÃO DE ACESSO ADMINISTRATIVO
+if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
+    // Redireciona para a tela de login se não for admin
+    header('Location: ../client/login.html'); 
+    exit(); 
+}
 ?>
 
 <!DOCTYPE html>
