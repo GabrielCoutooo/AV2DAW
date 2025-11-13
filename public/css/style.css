@@ -619,7 +619,15 @@ body.modal-aberto {
     border-color: #1e5ba8;
     box-shadow: 0 0 5px rgba(30, 91, 168, 0.2);
 }
-
+.input-com-icone {
+    position: relative;
+    width: 100%;
+}
+.input-com-icone input { /**/
+    padding-right: 40px; 
+    box-sizing: border-box; 
+    width: 100%;
+}
 .opcoes-login {
     display: flex;
     justify-content: space-between;
@@ -663,9 +671,30 @@ body.modal-aberto {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+.btn-toggle-senha {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s;
+}
+.btn-toggle-senha:hover {
+    color: #000;
+}
 
 .btn-fazer-login-form:hover {
     background-color: #153d7a;
+}
+.mensagem-login {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  transition: color 0.3s ease;
 }
 
 .texto-cadastro-login {
