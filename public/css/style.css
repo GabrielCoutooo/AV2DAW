@@ -250,18 +250,6 @@ body {
     font-weight: bold;
 }
 
-/* ===== SEÇÃO DE DIMENSÕES ===== */
-.secao-dimensoes {
-    background-color: #00bfff;
-    padding: 2rem;
-    text-align: center;
-}
-
-.texto-dimensoes {
-    color: #fff;
-    font-size: 1.2rem;
-    font-weight: bold;
-}
 
 /* ===== footer ===== */
 .footer {
@@ -724,4 +712,180 @@ body {
   color: red;
   margin-top: 10px;
   font-weight: bold;
+}
+/*
+   SEÇÃO DE CARROS (POPULARES / RECOMENDADOS)
+   */
+.carros-container {
+    width: 100%;
+    /* Ajuste o max-width baseado no seu layout principal */
+    max-width: 1200px; 
+    margin: 40px auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+    position: relative; /* Necessário para as setas, se for adicionar */
+}
+
+.carros-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.carros-header h2 {
+    font-size: 20px;
+    font-weight: 500;
+    color: #9A9A9A; /* Cinza claro para o título */
+}
+
+/* --- O Grid de Carros (Scroller Horizontal) --- */
+.carros-grid {
+    display: flex;
+    overflow-x: auto; /* Habilita o scroll horizontal */
+    gap: 24px;
+    padding: 16px 4px; /* Espaço para a sombra do card não ser cortada */
+
+    /* Esconde a barra de scroll padrão */
+    -ms-overflow-style: none;  /* IE e Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.carros-grid::-webkit-scrollbar {
+    display: none; /* Chrome, Safari e Opera */
+}
+
+/* --- O Card Individual --- */
+.carro-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 24px;
+    width: 290px; /* Largura fixa para cada card */
+    flex-shrink: 0; /* Impede que o card encolha */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+    box-sizing: border-box;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.carro-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Cabeçalho do Card (Nome + Coração) --- */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 4px;
+}
+
+.card-header h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1F2937; /* Preto/Azul escuro */
+    margin: 0;
+}
+
+.carro-categoria {
+    font-size: 14px;
+    font-weight: 500;
+    color: #9A9A9A;
+    margin-bottom: 20px;
+}
+
+/* --- Botão de Like (Coração) --- */
+.btn-like {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 0;
+    color: #E0E0E0; /* Coração cinza (não curtido) */
+}
+
+.btn-like.active {
+    color: #EF4444; /* Coração vermelho (curtido) */
+}
+
+
+/* --- Imagem do Card --- */
+.card-imagem {
+    width: 100%;
+    height: 150px; /* Altura fixa para a imagem */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Garante que a imagem caiba sem distorcer */
+}
+
+/* --- Especificações (Gasolina, Câmbio, Pessoas) --- */
+.card-specs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: #555;
+    flex-wrap: wrap; /* Caso não caiba, quebra a linha */
+}
+
+.card-specs span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #9A9A9A;
+}
+
+.card-specs i {
+    font-size: 16px; /* Tamanho do ícone */
+    color: #9A9A9A;
+}
+
+/* --- Rodapé do Card (Preço + Botão) --- */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.carro-preco {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.4;
+}
+
+.carro-preco strong {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1F2937;
+    display: block;
+}
+
+.carro-preco s { /* Preço antigo (R$100,00) */
+    font-weight: 500;
+    color: #9A9A9A;
+}
+
+.btn-alugar {
+    background-color: #3B82F6; /* Azul principal */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-alugar:hover {
+    background-color: #2563EB; /* Azul mais escuro no hover */
 }

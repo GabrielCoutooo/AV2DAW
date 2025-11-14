@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 async function carregarVeiculosHomePage() {
   try {
-    const response = await fetch("../../public/api/listar-veiculos.php");
+    const response = await fetch("../../public/api/client/listar-veiculos.php");
     if (!response.ok) {
       throw new Error("Erro ao carregar veículos: " + response.statusText);
     }
@@ -66,18 +66,17 @@ function renderizarCarros(carros, containerId) {
             <div class="card-imagem">
                             </div>
             
-            <div class="card-specs">
-                <span><i class="fas fa-gas-pump"></i> 90L</span> <span><i class="fas fa-cogs"></i> ${carro.tipo_transmissao}</span>
-                <span><i class="fas fa-user-friends"></i> ${carro.capacidade_pessoas} Pessoas</span>
-            </div>
-            
-            <div class="card-footer">
-                <div class="carro-preco">
-                    <strong>${precoFormatado}</strong>/semana
-                </div>
-                <button class="btn-alugar">Alugue</button>
-            </div>
-        `;
+        <div class="card-specs">
+        <span><i class="fas fa-gas-pump"></i> 90L</span> <span><i class="fas fa-cogs"></i> ${carro.tipo_transmissao}</span>
+        <span><i class="fas fa-user-friends"></i> ${carro.capacidade_pessoas} Pessoas</span>
+    </div>
+    <div class="card-footer">
+        <div class="carro-preco">
+            <strong>${precoFormatado}</strong>/semana
+            <s>R$100,00</s> </div>
+        <button class="btn-alugar">Alugue</button>
+    </div>
+`;
 
     container.appendChild(card);
   });
