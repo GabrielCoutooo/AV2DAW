@@ -4,8 +4,8 @@ session_start();
 
 // VERIFICAÇÃO DE ACESSO ADMINISTRATIVO
 if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
-    // Redireciona para a tela de login se não for admin
-    header('Location: ../client/login.html'); 
+    // Redireciona para a tela de login se não for admin (caminho absoluto)
+    header('Location: /php/AV2DAW/views/adm/login.html'); 
     exit(); 
 }
 ?>

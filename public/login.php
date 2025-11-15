@@ -46,6 +46,16 @@ if ($tipo === 'admin') {
         exit;
     }
 
+    // --- INÍCIO: Garantia de sessão / cookie com path correto ---
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+    // gera novo id de sessão por segurança
+    session_regenerate_id(true);
+    // força envio do cookie da sessão com path do projeto (ajuste se seu app estiver em outro subdiretório)
+    setcookie(session_name(), session_id(), 0, '/php/AV2DAW');
+    // --- FIM ---
+
     // Login ok
     $_SESSION['admin_id'] = $admin['id_admin'];
     $_SESSION['admin_nome'] = $admin['nome'];
@@ -55,7 +65,8 @@ if ($tipo === 'admin') {
     echo json_encode([
         'success' => true,
         'message' => 'Login de administrador realizado!',
-        'redirect' => '/AV2DAW/views/adm/index.php'
+        // caminho absoluto para evitar concatenações erradas
+        'redirect' => '/php/AV2DAW/views/adm/index.php'
     ]);
     exit;
 }
@@ -80,10 +91,19 @@ if (!password_verify($senha, $senhaHash)) {
     exit;
 }
 
+// --- INÍCIO: Garantia de sessão / cookie com path correto ---
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+session_regenerate_id(true);
+setcookie(session_name(), session_id(), 0, '/php/AV2DAW');
+// --- FIM ---
+
 // Login de Cliente bem-sucedido
 $_SESSION['usuario_id'] = $id_cliente;
 $_SESSION['usuario_email'] = $emailDB;
 $_SESSION['usuario_nome'] = $nome;
+$_SESSION['is_admin'] = false;
 
 // Suporte ao "lembrar login" (cookie opcional)
 if (!empty($_POST['lembrar'])) {
@@ -93,6 +113,7 @@ if (!empty($_POST['lembrar'])) {
 echo json_encode([
     'success' => true,
     'message' => 'Login realizado com sucesso!',
-    'redirect' => '../client/index.html'
+    // caminho absoluto para cliente
+    'redirect' => '/php/AV2DAW/views/client/index.html'
 ]);
 exit;
