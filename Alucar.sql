@@ -56,6 +56,16 @@ CREATE TABLE `FILIAL` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `ADMIN`
+--
+CREATE TABLE `ADMIN` (
+  `id_admin` INT AUTO_INCREMENT PRIMARY KEY,
+  `nome` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) NOT NULL UNIQUE,
+  `senha_hash` VARCHAR(255) NOT NULL
+);
+
+--
 -- Estrutura para tabela `HABILITACAO`
 --
 

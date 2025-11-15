@@ -24,18 +24,11 @@
             <button class="fechar-login">&times;</button>
 
             <div class="formulario-login-container">
-                <h1 class="titulo-formulario-login">Faça Login na sua conta</h1>
-
-                <!-- Login com Google -->
-                <button class="btn-google-login">
-                    <i class="fab fa-google"></i>
-                    Continue com Google
-                </button>
-
-                <p class="texto-alternativo-login">ou faça login com seu email</p>
+                <h1 class="titulo-formulario-login">Login Admin</h1>
 
                 <!-- Formulário -->
                 <form class="form-login" id="form-login">
+                    <input type="hidden" name="tipo" value="admin">
                     <div class="grupo-input-login">
                         <label for="email-login" class="label-login">Email</label>
                         <input type="email" id="email-login" name="email" class="input-login" placeholder="mail@abc.com"
@@ -58,21 +51,14 @@
                             <input type="checkbox" name="lembrar" id="lembrar-login">
                             <span>Lembrar Login</span>
                         </label>
-                        <a href="#esqueceu" class="link-esqueceu">Esqueceu sua senha?</a>
                     </div>
                     <p id="mensagem-login" class="mensagem-login"></p>
                     <button type="submit" class="btn-fazer-login-form">Login</button>
                 </form>
-
-                <!-- Link Cadastro -->
-                <p class="texto-cadastro-login">
-                    Não tem login? <a href="register.html" class="link-cadastro">Faça seu cadastro</a>
-                </p>
             </div>
         </div>
     </div>
     <script src="../../public/js/login.js"></script>
-    <script src="../../public/js/script.js"></script>
 </body>
 
 </html>
