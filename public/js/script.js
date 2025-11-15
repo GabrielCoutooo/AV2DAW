@@ -22,6 +22,7 @@ async function carregarVeiculosHomePage() {
     }
     const data = await response.json();
     renderizarCarros(data.populares, "populares-grid");
+    renderizarCarros(data.recomendados, "recomendados-grid");
   } catch (error) {
     console.error("Erro ao carregar veículos:", error);
     document.getElementById("populares-grid").innerHTML =
@@ -64,6 +65,7 @@ function renderizarCarros(carros, containerId) {
             <p class="carro-categoria">${carro.categoria}</p>
             
             <div class="card-imagem">
+                <img src="../../public/uploads/carros/${carro.imagem ? carro.imagem : 'default.png'}" alt="${carro.nome_modelo}">
                             </div>
             
         <div class="card-specs">

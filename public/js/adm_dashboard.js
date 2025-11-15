@@ -40,7 +40,7 @@ function renderFrota(veiculos, container) {
 
         const card = `
             <div class="veiculo-card" onclick="verDetalhesVeiculo(${veiculo.id})">
-                <img src="${veiculo.imagem}" alt="${veiculo.modelo}" class="veiculo-img">
+                <img src="../../public/uploads/carros/${veiculo.imagem} || 'default.png'" alt="${veiculo.modelo}" class="veiculo-img">
                 <h3>${veiculo.marca} ${veiculo.modelo}</h3>
                 <p>${veiculo.categoria}</p>
                 <span style="color: ${disponivelColor};">

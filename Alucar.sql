@@ -101,7 +101,8 @@ CREATE TABLE `MODELO` (
   `nome_modelo` varchar(100) NOT NULL,
   `marca` varchar(50) NOT NULL,
   `categoria` varchar(50) NOT NULL,
-  `preco_diaria_base` decimal(10,2) NOT NULL
+  `preco_diaria_base` decimal(10,2) NOT NULL,
+  `imagem` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
