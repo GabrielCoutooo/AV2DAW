@@ -38,3 +38,4 @@ if ($stmt->execute()) {
 }
 $stmt->close();
 $con->close();
+/*teste*/
