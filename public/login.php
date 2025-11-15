@@ -1,10 +1,11 @@
 <?php
+
 require_once __DIR__ . '/../config/config.php';
 require_once APP_PATH . '/config/connection.php';
 require_once APP_PATH . '/config/auth-check.php';
 
 header("Content-Type: application/json; charset=UTF-8");
-
+file_put_contents("debug.txt", print_r($_POST, true));
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     echo json_encode(['success' => false, 'message' => 'Método inválido.']);
     exit;

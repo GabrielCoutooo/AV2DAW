@@ -1,10 +1,20 @@
-<?php include_once 'header.php'; ?>
+<?php
+include_once 'header.php';
+require_once APP_PATH . '/config/auth-check.php';
+
+if (!adminEstaLogado()) {
+    header("Location: /AV2DAW/views/adm/login.html");
+    exit;
+}
+
+?>
+
 
 <main>
     <section class="frota">
         <h2>FROTA DE VEÍCULOS</h2>
         <button class="btn btn-primary" onclick="abrirModalCadastro()">+ Adicionar Veículo</button>
-        
+
         <div class="frota-grid" id="frota-grid">
             <p>Carregando veículos...</p>
         </div>
@@ -19,10 +29,11 @@
                     <th>CONTATO</th>
                     <th>TURNO</th>
                     <th>ÚLT. MODELO ALUG.</th>
-                    <th>AÇÃO</th> </tr>
+                    <th>AÇÃO</th>
+                </tr>
             </thead>
             <tbody id="vendedores-tabela">
-                </tbody>
+            </tbody>
         </table>
     </section>
 
@@ -39,18 +50,19 @@
                 </tr>
             </thead>
             <tbody id="checklists-tabela">
-                </tbody>
+            </tbody>
         </table>
     </section>
 
     <section class="relatorios">
         <h2>INFORMAÇÕES GERAIS</h2>
         <div class="stats-grid" id="estatisticas-grid">
-            </div>
+        </div>
     </section>
 </main>
 
 <script src="../../public/js/adm_dashboard.js"></script>
 
 </body>
+
 </html>

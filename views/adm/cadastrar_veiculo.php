@@ -1,5 +1,11 @@
 <?php
-include_once '../../config/config.php';  
+include_once '../../config/config.php';
+require_once APP_PATH . '/config/auth-check.php';
+
+if (!adminEstaLogado()) {
+    header("Location: /AV2DAW/views/adm/login.html");
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $modelo = $_POST['modelo'];
@@ -25,13 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
 
         $id_modelo = $con->insert_id;
-        
+
         $sqlVeiculo = "INSERT INTO VEICULO (id_modelo, placa, ano, cor, tipo_transmissao, capacidade_pessoas, disponivel) 
                       VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $con->prepare($sqlVeiculo);
         $placa = 'ABC1D23';
-        $ano = 2024; 
+        $ano = 2024;
         $cor = 'Branco';
         $tipo_transmissao = 'Manual';
         $capacidade_pessoas = 5;
@@ -45,4 +51,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
     }
 }
-?>

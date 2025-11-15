@@ -1,26 +1,31 @@
 <?php
 
 header('Content-Type: application/json');
+if (!clienteEstaLogado()) {
+    header("Location: /AV2DAW/views/client/login.html");
+    exit;
+}
 
 $configPath = __DIR__ . '/../../../config/config.php';
 $connectionPath = __DIR__ . '/../../../config/connection.php';
-if(!file_exists($configPath)){
+if (!file_exists($configPath)) {
     echo json_encode([
         'error' => 'Arquivo config.php não encontrado.',
         'path' => $configPath
-]);
-exit;
+    ]);
+    exit;
 }
 require_once $configPath;
-if(!file_exists($connectionPath)){
+if (!file_exists($connectionPath)) {
     echo json_encode([
         'error' => 'Arquivo connection.php não encontrado.',
         'path' => $connectionPath
-]);
+    ]);
     exit;
 }
 require_once $connectionPath;
-function buscarVeiculosPorCategoria($con, $categoria){
+function buscarVeiculosPorCategoria($con, $categoria)
+{
     $sql = "
         SELECT 
             M.id_modelo,
@@ -50,7 +55,7 @@ function buscarVeiculosPorCategoria($con, $categoria){
     $stmt->close();
     return $dados;
 }
-$categorias = ['Recomendado','Popular','SUV'];
+$categorias = ['Recomendado', 'Popular', 'SUV'];
 $veiculosPorCategoria = [];
 foreach ($categorias as $categoria) {
     $veiculosPorCategoria[$categoria] = buscarVeiculosPorCategoria($con, $categoria);

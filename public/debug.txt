@@ -1,0 +1,7 @@
+Array
+(
+    [tipo] => admin
+    [email] => gabriel@alucar.com
+    [senha] => 12345
+    [lembrar] => on
+)

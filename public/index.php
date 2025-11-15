@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Front Controller - Ponto de entrada da aplicação
  * Todas as requisições devem passar por este arquivo
@@ -22,7 +23,7 @@ try {
         case 'home':
             require_once APP_ROOT . '/app/views/index.php';
             break;
-        
+
         default:
             http_response_code(404);
             require_once APP_ROOT . '/app/views/404.php';
@@ -32,4 +33,3 @@ try {
     http_response_code(500);
     echo "Erro: " . $e->getMessage();
 }
-?>

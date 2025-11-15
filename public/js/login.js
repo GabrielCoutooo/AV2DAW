@@ -8,7 +8,9 @@
  */
 //Aguardando o carregamento completo do DOM
 document.addEventListener("DOMContentLoaded", function () {
-  const form = document.getElementById("form-login");
+  const formAdmin = document.getElementById("form-login-admin");
+  const formClient = document.getElementById("form-login-client");
+  const form = formAdmin ?? formClient;
   const emailInput = document.getElementById("email-login");
   const passwordInput = document.getElementById("senha-login");
   const togglePassword = document.getElementById("toggle-senha");
@@ -40,8 +42,12 @@ document.addEventListener("DOMContentLoaded", function () {
     mensagem.style.color = "gray";
 
     const dados = new FormData(form);
+    const tipo = form.querySelector('input[name="tipo"]')
+      ? form.querySelector('input[name="tipo"]').value
+      : "cliente";
+    dados.append("tipo", tipo);
     try {
-      const resposta = await fetch("../../public/login.php", {
+      const resposta = await fetch("/AV2DAW/public/login.php", {
         method: "POST",
         body: dados,
       });

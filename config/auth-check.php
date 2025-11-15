@@ -13,38 +13,45 @@ require_once __DIR__ . '/config.php';
  * 
  * @return bool Retorna true se o usuário estiver autenticado, caso contrário, false.
  */
-function usuarioEstaLogado()
+function clienteEstaLogado()
 {
     return isset($_SESSION['usuario_id']) && !empty($_SESSION['usuario_id']);
 }
-/**
- * Obtém os dados do usuário logado de forma segura
- * 
- * @return array|null Retorna um array com os dados do usuário ou null se não estiver autenticado.
- */
+
+function adminEstaLogado()
+{
+    return isset($_SESSION['admin_logado']) && $_SESSION['admin_logado'] === true;
+}
+
+function usuarioEstaLogado()
+{
+    return clienteEstaLogado() || adminEstaLogado();
+}
+
 function obterDadosUsuario()
 {
-    if (usuarioEstaLogado()) {
-        $nomeCompleto = $_SESSION['usuario_nome'];
-        if (!empty($nomeCompleto)) {
-            // Extrai o primeiro nome para saudação personalizada
-            $partes = explode(' ', trim($nomeCompleto));
-            $primeiroNome = $partes[0];
-            $primeiroSegundoNome = isset($partes[1]) ? $partes[0] . ' ' . $partes[1] : $partes[0];
-        } else {
-            // Se o nome estiver vazio usa fallback
-            $primeiroNome = 'Visitante';
-            $nomeCompleto = 'Visitante';
-            $primeiroSegundoNome = 'Visitante';
-        }
+    if (clienteEstaLogado()) {
+        $nomeCompleto = $_SESSION['usuario_nome'] ?? '';
+        $partes = explode(' ', trim($nomeCompleto));
+        $primeiroNome = $partes[0] ?? '';
+        $primeiroSegundoNome = isset($partes[1]) ? ($partes[0] . ' ' . $partes[1]) : $partes[0];
         return [
-            'id' => $_SESSION['usuario_id'],
-            'email' => $_SESSION['usuario_email'],
+            'tipo' => 'cliente',
+            'id' => $_SESSION['usuario_id'] ?? null,
+            'email' => $_SESSION['usuario_email'] ?? null,
             'nome' => $nomeCompleto,
-            // Extrai o primeiro nome para saudação personalizada
             'primeiro_nome' => $primeiroNome,
-            // Extrai o primeiro e segundo nome para saudação personalizada
-            'primeiro_segundo_nome' => $primeiroSegundoNome
+            'primeiro_segundo_nome' => $primeiroSegundoNome,
+        ];
+    }
+    if (adminEstaLogado()) {
+        return [
+            'tipo' => 'admin',
+            'id' => $_SESSION['admin_id'] ?? null,
+            'email' => $_SESSION['admin_email'] ?? null,
+            'nome' => $_SESSION['admin_nome'] ?? null,
+            'primeiro_nome' => $_SESSION['admin_nome'],
+            'primeiro_segundo_nome' => $_SESSION['admin_nome'],
         ];
     }
     return null;

@@ -1,15 +1,3 @@
-<?php
-// Inicia a sessão (se não estiver iniciada pelo config.php)
-session_start();
-
-// VERIFICAÇÃO DE ACESSO ADMINISTRATIVO
-if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
-    // Redireciona para a tela de login se não for admin
-    header('Location: ../client/login.html'); 
-    exit(); 
-}
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -205,6 +193,6 @@ if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
         <nav class="menu">
             <a href="index.php">Dashboard</a>
             <a href="vendas.php">Vender</a>
-            <a href="../client/login.html" style="background-color: #e74c3c;">Sair</a>
+            <a href="logout.php" style="background-color: #e74c3c;">Sair</a>
         </nav>
     </header>
