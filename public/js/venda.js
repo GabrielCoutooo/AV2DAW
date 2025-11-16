@@ -29,27 +29,30 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // REMOVENDO TODA A LÓGICA DE CÁLCULO DE TAXAS/SEGURO
     function atualizarPrecoTotal(dias) {
         if (!veiculoData) return;
 
         const precoDiaria = parseFloat(veiculoData.preco_diaria_base) || 0;
-        let precoTotal = precoDiaria * dias;
-        let label = `/${dias} dias`;
+        let valorTotal = precoDiaria * dias;
 
+        // Lógica de desconto (mantém, aplicada ao total)
         if (dias >= 30) {
-            precoTotal *= 0.9;
-            label = "/mês (30 dias)";
+            valorTotal *= 0.9; // 10% de desconto
         } else if (dias >= 15) {
-            precoTotal *= 0.95;
-            label = "/15 dias";
-        } else if (dias === 7) {
-            label = "/semana (7 dias)";
+            valorTotal *= 0.95; // 5% de desconto
         }
+        
+        let label = `/${dias} dias`;
+        if (dias === 7) label = "/semana (7 dias)";
+        if (dias >= 30) label = "/mês (30 dias)";
 
-        el.precoTotal.textContent = formatarMoeda(precoTotal);
+        el.precoTotal.textContent = formatarMoeda(valorTotal);
         el.labelDias.textContent = label;
+        
+        // Armazena no dataset (valor total apenas)
         el.btnAlugar.dataset.dias = dias;
-        el.btnAlugar.dataset.total = precoTotal;
+        el.btnAlugar.dataset.total = valorTotal.toFixed(2);
     }
 
     async function carregarDetalhesVeiculo() {
@@ -94,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <li id="cor-li"><i class="fas fa-check-circle"></i> Cor: ${veiculoData.cor}</li>
             `;
 
-            atualizarPrecoTotal(7);
+            atualizarPrecoTotal(7); // Inicia com 7 dias
 
             if (el.diasOpcoes) el.diasOpcoes.addEventListener('click', (e) => {
                 const btn = e.target.closest('.btn-dias');
@@ -116,18 +119,20 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (el.btnAlugar) el.btnAlugar.addEventListener('click', () => {
-                const dias = el.btnAlugar.dataset.dias || 7;
-                const total = el.btnAlugar.dataset.total || 0;
-                
-                // salva no localStorage com a chave que pagamento.js espera
+                const idVeiculo = veiculoData.id_veiculo || veiculoData.id || ID_VEICULO;
+                const dias = Number(el.btnAlugar.dataset.dias);
+                const total = el.btnAlugar.dataset.total;
+
+                // PAYLOAD FINAL SALVO NO LOCAL STORAGE (APENAS COM VALOR TOTAL DO VEÍCULO)
                 const booking = {
-                    id_veiculo: veiculoData.id_veiculo || veiculoData.id || ID_VEICULO,
+                    id_veiculo: Number(idVeiculo),
                     dias: Number(dias),
-                    valor_total: Number(total),
-                    nome_modelo: veiculoData.nome_modelo || '',
-                    marca: veiculoData.marca || '',
-                    preco_diaria_base: veiculoData.preco_diaria_base || 0,
-                    imagem: veiculoData.imagem || 'default.png'
+                    valor_total: total, 
+                    nome_modelo: veiculoData.nome_modelo,
+                    marca: veiculoData.marca,
+                    categoria: veiculoData.categoria,
+                    imagem: veiculoData.imagem,
+                    preco_diaria_base: veiculoData.preco_diaria_base
                 };
                 try {
                     localStorage.setItem('alucar_booking', JSON.stringify(booking));
@@ -135,7 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.warn('localStorage não disponível', e);
                 }
                 
-                // redireciona para pagamento.php
                 window.location.href = `/AV2DAW/views/client/pagamento.php`;
             });
 

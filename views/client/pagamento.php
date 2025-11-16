@@ -112,6 +112,9 @@ if (!clienteEstaLogado()) {
             font-size: 0.95rem;
             font-family: inherit;
             transition: border-color 0.3s;
+            width: 100%;
+            margin-bottom: 8px;
+            box-sizing: border-box;
         }
 
         .entrada-formulario:focus {
@@ -150,6 +153,7 @@ if (!clienteEstaLogado()) {
             padding: 30px;
             border-radius: 15px;
             background-color: #fff;
+            height: fit-content;
         }
 
         .reserva-header {
@@ -180,7 +184,7 @@ if (!clienteEstaLogado()) {
             color: #555;
         }
 
-        .linha-valor:last-of-type {
+        .linha-valor.total {
             border-bottom: none;
             margin-top: 20px;
             font-size: 1.5rem;
@@ -303,7 +307,6 @@ if (!clienteEstaLogado()) {
         }
     </style>
 </head>
-
 <body>
     <header class="navbar">
         <div class="navbar-container">
@@ -345,15 +348,15 @@ if (!clienteEstaLogado()) {
                         
                         <div class="local-info">
                             <p><strong><i class="fas fa-arrow-up" style="color: #00bfff; margin-right: 8px;"></i>RETIRADA</strong></p>
-                            <input type="datetime-local" id="input-dt-retirada" class="entrada-formulario" style="width: 100%; margin-bottom: 8px;">
-                            <input type="text" id="input-loc-retirada" placeholder="Local de Retirada (Ex: Aeroporto, Endereço)" class="entrada-formulario" value="Aeroporto" style="width: 100%;">
+                            <input type="datetime-local" id="input-dt-retirada" class="entrada-formulario" style="width:100%; margin-bottom:8px;">
+                            <input type="text" id="input-loc-retirada" placeholder="Local de Retirada (Ex: Aeroporto, Endereço)" class="entrada-formulario" value="Aeroporto" style="width:100%;">
                             <p class="servico-shuttle"><i class="fas fa-bus"></i> Serviço de Shuttle</p>
                         </div>
                         
                         <div class="local-info">
                             <p><strong><i class="fas fa-arrow-down" style="color: #cc0000; margin-right: 8px;"></i>DEVOLUÇÃO</strong></p>
-                            <input type="datetime-local" id="input-dt-devolucao" class="entrada-formulario" style="width: 100%; margin-bottom: 8px;">
-                            <input type="text" id="input-loc-devolucao" placeholder="Local de Devolução" class="entrada-formulario" value="Aeroporto" style="width: 100%;">
+                            <input type="datetime-local" id="input-dt-devolucao" class="entrada-formulario" style="width:100%; margin-bottom:8px;">
+                            <input type="text" id="input-loc-devolucao" placeholder="Local de Devolução" class="entrada-formulario" value="Aeroporto" style="width:100%;">
                             <p class="servico-shuttle"><i class="fas fa-bus"></i> Serviço de Shuttle</p>
                         </div>
                         
@@ -370,19 +373,6 @@ if (!clienteEstaLogado()) {
                     </div>
 
                     <div class="valores-resumo">
-                        <div class="linha-valor">
-                            <span>Valor do Veículo</span>
-                            <strong id="valor-veiculo-resumo">R$ 0,00</strong>
-                        </div>
-                        <div class="linha-valor">
-                            <span>Seguro (obrigatório)</span>
-                            <strong id="valor-seguro-resumo">R$ 0,00</strong>
-                        </div>
-                        <div class="linha-valor">
-                            <span>Taxa da Locadora</span>
-                            <strong id="valor-taxa-resumo">R$ 0,00</strong>
-                        </div>
-                        
                         <div class="linha-valor total">
                             <span>Valor Total:</span>
                             <strong id="valor-total-resumo">R$ 0,00</strong>

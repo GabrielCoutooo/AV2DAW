@@ -1,7 +1,7 @@
 Array
 (
-    [email] => gabrielccsilva@gmail.com
-    [senha] => 12345
+    [tipo] => admin
+    [email] => admin@alucar.com
+    [senha] => 123456
     [lembrar] => on
-    [tipo] => cliente
 )
