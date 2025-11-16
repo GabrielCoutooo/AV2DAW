@@ -29,8 +29,15 @@ async function carregarVeiculosHomePage() {
         "<p>Faça Login para ver os veículos recomendados.</p>";
       return;
     }
+    const todos = [
+      ...(data.populares || []),
+      ...(data.recomendados || []),
+      ...(data.suv || []),
+      ...(data.outros || []),
+    ];
     renderizarCarros(data.populares, "populares-grid");
     renderizarCarros(data.recomendados, "recomendados-grid");
+    renderizarCarros(todos, "todos-grid");
   } catch (error) {
     console.error("Erro ao carregar veículos:", error);
     document.getElementById("populares-grid").innerHTML =
@@ -39,6 +46,39 @@ async function carregarVeiculosHomePage() {
       "<p>Erro ao carregar veículos recomendados.</p>";
   }
 }
+
+// === Navegação de carrossel ===
+function configurarCarrossel(botaoPrevId, botaoNextId, gridId) {
+  const btnPrev = document.getElementById(botaoPrevId);
+  const btnNext = document.getElementById(botaoNextId);
+  const grid = document.getElementById(gridId);
+
+  if (!btnPrev || !btnNext || !grid) {
+    console.warn("Elementos do carrossel não encontrados:", {
+      botaoPrevId,
+      botaoNextId,
+      gridId,
+    });
+    return;
+  }
+
+  const passo = 300; // pixels por clique
+
+  btnPrev.addEventListener("click", () => {
+    grid.scrollBy({ left: -passo, behavior: "smooth" });
+  });
+
+  btnNext.addEventListener("click", () => {
+    grid.scrollBy({ left: passo, behavior: "smooth" });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  configurarCarrossel("pop-prev", "pop-next", "populares-grid");
+  configurarCarrossel("rec-prev", "rec-next", "recomendados-grid");
+  configurarCarrossel("all-prev", "all-next", "todos-grid");
+});
+
 /**
  * Renderiza os cards dos carros em um container específico.
  * @param {Array} carros - Array de objetos de carros vindo da API.
@@ -46,6 +86,10 @@ async function carregarVeiculosHomePage() {
  */
 function renderizarCarros(carros, containerId) {
   const container = document.getElementById(containerId);
+  if (!container) {
+    console.error("Container não encontrado:", containerId);
+    return;
+  }
 
   container.innerHTML = "";
 
@@ -73,7 +117,7 @@ function renderizarCarros(carros, containerId) {
             <p class="carro-categoria">${carro.categoria}</p>
             
             <div class="card-imagem">
-                <img src="../../public/uploads/carros/${
+                <img src="/AV2DAW/public/images/uploads/carros/${
                   carro.imagem ? carro.imagem : "default.png"
                 }" alt="${carro.nome_modelo}">
                             </div>
