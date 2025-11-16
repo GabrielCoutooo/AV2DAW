@@ -130,6 +130,21 @@ function excluirVeiculo() {
   }
 }
 
+// ============ FUNÇÕES MODAIS DE VENDEDOR ============
+function abrirModalCadastroVendedor() {
+  const modal = document.getElementById("modalCadastroVendedor");
+  if (!modal) return;
+  document.getElementById("formCadastroVendedor").reset();
+  document.getElementById("msg-cadastro-vendedor").textContent = '';
+  modal.style.display = "flex";
+}
+
+function fecharModalCadastroVendedor() {
+  const modal = document.getElementById("modalCadastroVendedor");
+  if (!modal) return;
+  modal.style.display = "none";
+}
+
 // ============ EVENT LISTENERS PARA OS FORMULÁRIOS ============
 document.addEventListener("DOMContentLoaded", () => {
   // Fechar modais ao clicar fora
@@ -240,6 +255,54 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (err) {
         console.error("Erro ao enviar:", err);
         alert("Erro ao atualizar o veículo!");
+      }
+    });
+  }
+
+  // Formulário de Cadastro de Vendedor
+  const formCadastroVendedor = document.getElementById("formCadastroVendedor");
+  if (formCadastroVendedor) {
+    formCadastroVendedor.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const msgEl = document.getElementById("msg-cadastro-vendedor");
+      msgEl.textContent = 'Processando...';
+      
+      const senha = formData.get('senha');
+      const confirmaSenha = formData.get('confirmar_senha');
+      
+      if (senha !== confirmaSenha) {
+        msgEl.style.color = 'red';
+        msgEl.textContent = 'Erro: As senhas não coincidem!';
+        return;
+      }
+      
+      formData.append("acao", "cadastrar");
+      
+      try {
+        const response = await fetch("/AV2DAW/views/adm/cadastrar_admin.php", {
+          method: "POST",
+          body: formData,
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          msgEl.style.color = 'green';
+          msgEl.textContent = "Vendedor cadastrado com sucesso! Use a senha inicial.";
+          
+          setTimeout(() => {
+            fecharModalCadastroVendedor();
+            document.dispatchEvent(new Event("atualizarDashboard"));
+          }, 1500);
+        } else {
+          msgEl.style.color = 'red';
+          msgEl.textContent = "Erro: " + (result.error || result.message || "Erro desconhecido.");
+        }
+      } catch (err) {
+        console.error("Erro ao cadastrar vendedor:", err);
+        msgEl.style.color = 'red';
+        msgEl.textContent = "Erro de comunicação com o servidor.";
       }
     });
   }

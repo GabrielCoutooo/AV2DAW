@@ -24,6 +24,7 @@ require_once APP_PATH . "/config/auth-check.php";
 
     <section class="vendedores">
         <h2>GERENCIAR VENDEDORES</h2>
+        <button class="btn btn-success" onclick="abrirModalCadastroVendedor()">+ Adicionar Vendedor</button>
         <table>
             <thead>
                 <tr>
@@ -181,6 +182,103 @@ require_once APP_PATH . "/config/auth-check.php";
         </form>
     </div>
 </div>
+
+<!-- MODAL DE CADASTRO DE VENDEDOR -->
+<div id="modalCadastroVendedor" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 650px;">
+        <span class="fechar" onclick="fecharModalCadastroVendedor()">&times;</span>
+
+        <h2 style="text-align: center;">CADASTRAR VENDEDOR</h2>
+
+        <form id="formCadastroVendedor">
+            <div class="form-group-inline">
+                <label>Nome completo</label>
+                <input type="text" name="nome" required>
+                <label>CPF</label>
+                <input type="text" name="cpf" required>
+            </div>
+            
+            <div class="form-group-inline">
+                <label>RG</label>
+                <input type="text" name="rg">
+                <label>Data de nascimento</label>
+                <input type="date" name="data_nascimento">
+                <label>Gênero</label>
+                <select name="genero">
+                    <option value="">Selecione</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+            
+            <div class="form-group-inline">
+                <label>Telefone</label>
+                <input type="tel" name="telefone">
+                <label>E-mail (Login)</label>
+                <input type="email" name="email" required>
+                <label>Endereço completo</label>
+                <input type="text" name="endereco">
+            </div>
+
+            <div class="form-group-inline">
+                <label>Data de admissão</label>
+                <input type="date" name="data_admissao">
+                <label>Turno</label>
+                <input type="text" name="turno">
+                <label>Carteira de trabalho</label>
+                <input type="text" name="carteira_trabalho">
+            </div>
+
+            <div class="form-group-inline">
+                <label>Banco</label>
+                <input type="text" name="banco">
+                <label>Agência e conta</label>
+                <input type="text" name="agencia_conta">
+            </div>
+
+            <div class="form-group-inline">
+                <label>Senha de Acesso</label>
+                <input type="password" name="senha" placeholder="Senha inicial do Admin" required>
+                <label>Confirmar Senha</label>
+                <input type="password" name="confirmar_senha" placeholder="Confirme a senha" required>
+            </div>
+            
+            <p id="msg-cadastro-vendedor" style="color:red; margin-top:10px;"></p>
+
+            <button type="submit" class="btn btn-salvar" style="margin-top: 15px;">FINALIZAR CADASTRO</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .form-group-inline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    .form-group-inline label,
+    .form-group-inline input,
+    .form-group-inline select {
+        flex: 1 1 30%;
+        min-width: 150px;
+    }
+    .form-group-inline input[type="text"],
+    .form-group-inline input[type="email"],
+    .form-group-inline input[type="tel"],
+    .form-group-inline input[type="date"],
+    .form-group-inline input[type="password"],
+    .form-group-inline select {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .btn-salvar {
+        background-color: #3498db;
+    }
+</style>
+
 <script>
     // Função global usada pelo JS do dashboard para abrir a página de Check-in
     function abrirCheckin(id_locacao) {
