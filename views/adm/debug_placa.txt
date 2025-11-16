@@ -16,3 +16,5 @@
 2025-11-16 07:30:12 | Placa recebida: 'NAL-354'
 2025-11-16 07:32:47 | Placa recebida: 'CTN-420'
 2025-11-16 07:34:45 | Placa recebida: 'NRK-024'
+2025-11-16 08:12:34 | Placa recebida: 'XRL9'
+2025-11-16 08:23:36 | Placa recebida: 'VVVV'

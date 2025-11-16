@@ -1,7 +1,7 @@
 Array
 (
-    [email] => gabrielccsilva@gmail.com
-    [senha] => 12345
+    [email] => jeffersoncorreia425@gmail.com
+    [senha] => 123456
     [lembrar] => on
     [tipo] => cliente
 )
