@@ -176,8 +176,44 @@
       recalcularTotais();
 
       document.getElementById("btn-pay").addEventListener("click", () => {
-        alert("Pagamento processado (demo).");
-        window.location.href = "index.html";
+        // Preparar dados para enviar ao pagamento.php
+        const dataRetiradaSelecionada = new Date(inputDataRetirada.value);
+        const dataDevolucaoSelecionada = new Date(inputDataDevolucao.value);
+        const quantidadeDiasCalculada = calcularDiferencaDias(
+          dataRetiradaSelecionada,
+          dataDevolucaoSelecionada
+        );
+        const valorSubtotalVeiculo = precoDiariaBase * quantidadeDiasCalculada;
+        const valorSeguro = checkboxSeguro.checked
+          ? Math.round(valorSubtotalVeiculo * 0.091 * 100) / 100
+          : 0;
+        const valorTotalReserva =
+          valorSubtotalVeiculo + valorSeguro + taxaLocadora;
+
+        // Montar URL com todos os dados
+        const params = new URLSearchParams({
+          id_veiculo: idVeiculo,
+          nome_veiculo: dadosVeiculo.nome_modelo,
+          categoria: dadosVeiculo.categoria || "",
+          transmissao: dadosVeiculo.tipo_transmissao || "",
+          capacidade: dadosVeiculo.capacidade_pessoas || "",
+          imagem: dadosVeiculo.imagem || "default.png",
+          data_retirada: inputDataRetirada.value,
+          data_devolucao: inputDataDevolucao.value,
+          local_retirada: inputLocalRetirada.value,
+          local_devolucao: inputLocalDevolucao.value,
+          dias: quantidadeDiasCalculada,
+          preco_diaria: precoDiariaBase,
+          subtotal: valorSubtotalVeiculo.toFixed(2),
+          seguro: valorSeguro.toFixed(2),
+          tem_seguro: checkboxSeguro.checked ? "1" : "0",
+          taxa: taxaLocadora.toFixed(2),
+          total: valorTotalReserva.toFixed(2),
+        });
+
+        const urlPagamento = `/AV2DAW/views/client/pagamento.php?${params.toString()}`;
+        console.log("Redirecionando para:", urlPagamento);
+        window.location.href = urlPagamento;
       });
     } catch (erro) {
       console.error(erro);
