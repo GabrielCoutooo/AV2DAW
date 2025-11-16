@@ -83,6 +83,8 @@ require_once APP_PATH . "/config/auth-check.php";
             <label>Categoria</label>
             <select name="categoria" required>
                 <option value="">Selecione</option>
+                <option value="Popular">Popular</option>
+                <option value="Recomendado">Recomendado</option>
                 <option value="Esportivo">Esportivo</option>
                 <option value="SUV">SUV</option>
                 <option value="Luxo">Luxo</option>
@@ -141,6 +143,8 @@ require_once APP_PATH . "/config/auth-check.php";
             <label>Categoria</label>
             <select name="categoria" required>
                 <option value="">Selecione</option>
+                <option value="Popular">Popular</option>
+                <option value="Recomendado">Recomendado</option>
                 <option value="Esportivo">Esportivo</option>
                 <option value="SUV">SUV</option>
                 <option value="Luxo">Luxo</option>
