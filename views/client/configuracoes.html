@@ -414,6 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const API_LOCACOES = '/AV2DAW/public/api/client/locacoes.php';
     const API_SENHA = '/AV2DAW/public/api/client/atualizar-senha.php';
     const API_PAGAMENTO = '/AV2DAW/public/api/client/atualizar-pagamento.php';
+    const API_OCORRENCIA = '/AV2DAW/public/api/client/registrar-ocorrencia.php'; // <-- nova constante
 
     const spans = {
         nome: document.getElementById('nome-usuario'),
@@ -529,8 +530,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>Valor: <strong>R$ ${formatNumber(l.valor_total)}</strong></p>
                     <span class="status-badge ${statusClass}">${l.status || 'Reservado'}</span>
                     &nbsp; <a href="/AV2DAW/views/client/checkout.php?id_locacao=${encodeURIComponent(l.id_locacao)}">Ver detalhes</a>
+                    <button class="btn-ocorrencia" data-locacao-id="${l.id_locacao}" data-modelo="${escapeHtml((l.marca||'') + ' ' + (l.nome_modelo||''))}" data-valor="${formatNumber(l.valor_total)}" data-status="${escapeHtml(l.status || '')}" style="background:#cc0000;color:#fff;border:none;padding:6px 10px;border-radius:6px;margin-left:8px;cursor:pointer;">Abrir Ocorrência</button>
                 `;
                 listaLocacoesEl.appendChild(div);
+
+                // listener para abrir modal (usa dataset)
+                const btn = div.querySelector('.btn-ocorrencia');
+                if (btn) btn.addEventListener('click', (ev) => abrirModalOcorrencia(ev.currentTarget.dataset));
             });
         } catch (err) {
             listaLocacoesEl.innerHTML = '<p>Erro de rede ao carregar locações.</p>';
@@ -622,6 +628,122 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarPerfil();
     carregarLocacoes();
 });
+</script>
+
+<!-- adiciona/imprime lógica do modal e handlers robustos -->
+<script>
+(function(){
+    const API_OCORRENCIA = '/AV2DAW/public/api/client/registrar-ocorrencia.php';
+
+    function showMsg(el, text) {
+        if (!el) return;
+        el.textContent = text;
+        el.style.display = 'block';
+        setTimeout(() => el.style.display = 'none', 3500);
+    }
+
+    // normaliza dataset/objeto e abre modal
+    function abrirModalOcorrencia(data) {
+        const modal = document.getElementById('modalOcorrencia');
+        if (!modal) return;
+
+        // converte dataset-like para objeto com chaves em camelCase
+        const ds = {};
+        if (data) {
+            const src = data.dataset ? data.dataset : data;
+            for (const k in src) {
+                const camel = k.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+                ds[camel] = src[k];
+            }
+        }
+
+        const locacaoId = ds.locacaoId || ds.locacaoid || ds.locacao || ds['locacao-id'] || ds['locacaoId'] || '';
+        const modelo = ds.modelo || ds.model || '';
+        const valor = ds.valor || '0,00';
+        const status = ds.status || '';
+
+        document.getElementById('ocorrencia-id-locacao').textContent = locacaoId || '0';
+        document.getElementById('ocorrencia-veiculo-nome').textContent = modelo || '—';
+        document.getElementById('ocorrencia-veiculo-specs').textContent = `Status: ${status || '—'}`;
+        document.getElementById('ocorrencia-valor-total').textContent = `R$ ${valor}`;
+        document.getElementById('ocorrencia-status-resumo').textContent = status || '—';
+        document.getElementById('ocorrencia-status').textContent = 'AGUARDANDO REGISTRO';
+
+        if (ds.img) {
+            const imgEl = document.getElementById('ocorrencia-veiculo-img');
+            if (imgEl) imgEl.src = ds.img;
+        }
+
+        const form = document.getElementById('form-ocorrencia');
+        if (form) {
+            form.dataset.locacaoId = locacaoId || '';
+            form.reset();
+        }
+
+        modal.style.display = 'flex';
+    }
+    // expõe globalmente para compatibilidade com handlers inline
+    window.abrirModalOcorrencia = abrirModalOcorrencia;
+
+    window.fecharModalOcorrencia = function() {
+        const modal = document.getElementById('modalOcorrencia');
+        if (!modal) return;
+        modal.style.display = 'none';
+    };
+
+    // delegação de clique para botões "Abrir Ocorrência" criados dinamicamente
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest && e.target.closest('.btn-ocorrencia');
+        if (!btn) return;
+        e.preventDefault();
+        abrirModalOcorrencia(btn.dataset);
+    });
+
+    // submit do form-ocorrencia (delegado) --> registra via API, atualiza UI e recarrega locações
+    document.addEventListener('submit', async function (e) {
+        if (!e.target || e.target.id !== 'form-ocorrencia') return;
+        e.preventDefault();
+
+        const form = e.target;
+        const locacaoId = form.dataset.locacaoId;
+        const tipos = Array.from(form.querySelectorAll('input[name="tipo_ocorrencia[]"]:checked')).map(i => i.value);
+        const detalhes = form.querySelector('textarea[name="detalhes_outros"]').value.trim();
+
+        const msgSucesso = document.getElementById('msg-sucesso');
+        const msgErro = document.getElementById('msg-erro');
+
+        if ((!tipos || tipos.length === 0) && detalhes === '') {
+            showMsg(msgErro, 'Selecione um tipo de ocorrência ou descreva nos detalhes.');
+            return;
+        }
+
+        const payload = { id_locacao: Number(locacaoId), tipos, detalhes };
+
+        try {
+            const res = await fetch(API_OCORRENCIA, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data && data.success) {
+                showMsg(msgSucesso, data.message || 'Ocorrência registrada com sucesso.');
+                document.getElementById('ocorrencia-status').textContent = 'EM ANÁLISE';
+                fecharModalOcorrencia();
+                if (typeof carregarLocacoes === 'function') carregarLocacoes();
+            } else {
+                showMsg(msgErro, data.error || 'Erro ao registrar ocorrência.');
+            }
+        } catch (err) {
+            console.error(err);
+            showMsg(msgErro, 'Erro de rede ao registrar ocorrência.');
+        }
+    });
+
+    // helper exposto se necessário
+    window.fecharModalOcorrencia = window.fecharModalOcorrencia;
+})();
 </script>
 </body>
 </html>
