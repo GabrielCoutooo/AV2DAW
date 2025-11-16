@@ -15,12 +15,12 @@ require_once __DIR__ . '/config.php';
  */
 function clienteEstaLogado()
 {
-    return isset($_SESSION['usuario_id']) && !empty($_SESSION['usuario_id']);
+    return !empty($_SESSION['usuario_id']) && ($_SESSION['tipo_usuario'] ?? '') === 'cliente';
 }
 
 function adminEstaLogado()
 {
-    return isset($_SESSION['admin_logado']) && $_SESSION['admin_logado'] === true;
+    return !empty($_SESSION['admin_id']) && ($_SESSION['tipo_usuario'] ?? '') === 'admin';
 }
 
 function usuarioEstaLogado()

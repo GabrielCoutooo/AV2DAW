@@ -88,6 +88,12 @@ require_once APP_PATH . "/config/auth-check.php";
                 <option value="Luxo">Luxo</option>
                 <option value="Econômico">Econômico</option>
                 <option value="Sedan">Sedan</option>
+                <option value="Hatch Compacto">Hatch Compacto</option>
+                <option value="SUV Compacto">SUV Compacto</option>
+                <option value="Hatch Médio">Hatch Médio</option>
+                <option value="Compacto">Compacto</option>
+                <option value="Picape Compacta">Picape Compacta</option>
+                <option value="Picape Leve">Picape Leve</option>
             </select>
 
             <label>Cor</label>
@@ -140,6 +146,12 @@ require_once APP_PATH . "/config/auth-check.php";
                 <option value="Luxo">Luxo</option>
                 <option value="Econômico">Econômico</option>
                 <option value="Sedan">Sedan</option>
+                <option value="Hatch Compacta">Hatch Compacta</option>
+                <option value="SUV Compacto">SUV Compacto</option>
+                <option value="Hatch Médio">Hatch Médio</option>
+                <option value="Compacto">Compacto</option>
+                <option value="Picape Compacta">Picape Compacta</option>
+                <option value="Picape Leve">Picape Leve</option>
             </select>
 
             <label>Cor</label>

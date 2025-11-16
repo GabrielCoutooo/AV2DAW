@@ -21,6 +21,14 @@ async function carregarVeiculosHomePage() {
       throw new Error("Erro ao carregar veículos: " + response.statusText);
     }
     const data = await response.json();
+    if (data.error) {
+      console.error("Erro na resposta da API:", data.error);
+      document.getElementById("populares-grid").innerHTML =
+        "<p>Faça Login para ver os veículos populares.</p>";
+      document.getElementById("recomendados-grid").innerHTML =
+        "<p>Faça Login para ver os veículos recomendados.</p>";
+      return;
+    }
     renderizarCarros(data.populares, "populares-grid");
     renderizarCarros(data.recomendados, "recomendados-grid");
   } catch (error) {
@@ -41,7 +49,7 @@ function renderizarCarros(carros, containerId) {
 
   container.innerHTML = "";
 
-  if (carros.length === 0) {
+  if (!Array.isArray(carros) || carros.length === 0) {
     container.innerHTML = "<p>Nenhum carro disponível nesta categoria.</p>";
     return;
   }
@@ -65,12 +73,18 @@ function renderizarCarros(carros, containerId) {
             <p class="carro-categoria">${carro.categoria}</p>
             
             <div class="card-imagem">
-                <img src="../../public/uploads/carros/${carro.imagem ? carro.imagem : 'default.png'}" alt="${carro.nome_modelo}">
+                <img src="../../public/uploads/carros/${
+                  carro.imagem ? carro.imagem : "default.png"
+                }" alt="${carro.nome_modelo}">
                             </div>
             
         <div class="card-specs">
-        <span><i class="fas fa-gas-pump"></i> 90L</span> <span><i class="fas fa-cogs"></i> ${carro.tipo_transmissao}</span>
-        <span><i class="fas fa-user-friends"></i> ${carro.capacidade_pessoas} Pessoas</span>
+        <span><i class="fas fa-gas-pump"></i> 90L</span> <span><i class="fas fa-cogs"></i> ${
+          carro.tipo_transmissao
+        }</span>
+        <span><i class="fas fa-user-friends"></i> ${
+          carro.capacidade_pessoas
+        } Pessoas</span>
     </div>
     <div class="card-footer">
         <div class="carro-preco">

@@ -1,30 +1,26 @@
 <?php
+header('Content-Type: application/json; charset=UTF-8');
 
-header('Content-Type: application/json');
-if (!clienteEstaLogado()) {
-    header("Location: /AV2DAW/views/client/login.html");
-    exit;
-}
-
-$configPath = __DIR__ . '/../../../config/config.php';
+$configPath     = __DIR__ . '/../../../config/config.php';
 $connectionPath = __DIR__ . '/../../../config/connection.php';
-if (!file_exists($configPath)) {
-    echo json_encode([
-        'error' => 'Arquivo config.php não encontrado.',
-        'path' => $configPath
-    ]);
+$authPath       = __DIR__ . '/../../../config/auth-check.php';
+
+if (!file_exists($configPath) || !file_exists($connectionPath) || !file_exists($authPath)) {
+    echo json_encode(['error' => 'Arquivos de configuração ausentes.']);
     exit;
 }
+
 require_once $configPath;
-if (!file_exists($connectionPath)) {
-    echo json_encode([
-        'error' => 'Arquivo connection.php não encontrado.',
-        'path' => $connectionPath
-    ]);
+require_once $connectionPath;
+require_once $authPath;
+
+// Se quiser exigir login, responda JSON em vez de redirecionar com HTML
+if (!clienteEstaLogado()) {
+    echo json_encode(['error' => 'Usuário não autenticado', 'loggedIn' => false]);
     exit;
 }
-require_once $connectionPath;
-function buscarVeiculosPorCategoria($con, $categoria)
+
+function buscarVeiculosPorCategoria(mysqli $con, string $categoria): array
 {
     $sql = "
         SELECT 
@@ -55,10 +51,13 @@ function buscarVeiculosPorCategoria($con, $categoria)
     $stmt->close();
     return $dados;
 }
-$categorias = ['Recomendado', 'Popular', 'SUV'];
-$veiculosPorCategoria = [];
-foreach ($categorias as $categoria) {
-    $veiculosPorCategoria[$categoria] = buscarVeiculosPorCategoria($con, $categoria);
-}
-echo json_encode($veiculos, JSON_UNESCAPED_UNICODE);
+
+// Monte o JSON que o script.js espera
+$veiculosPorCategoria = [
+    'populares'    => buscarVeiculosPorCategoria($con, 'Popular'),
+    'recomendados' => buscarVeiculosPorCategoria($con, 'Recomendado'),
+    'suv'          => buscarVeiculosPorCategoria($con, 'SUV'),
+];
+
+echo json_encode($veiculosPorCategoria, JSON_UNESCAPED_UNICODE);
 exit;

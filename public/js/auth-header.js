@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Se o usuário estiver logado, cria a saudação e o botão de sair
       userAuthContainer.innerHTML = `
                 <span class="nav-link" style="color: #00bfff;">Olá, ${data.user.nome} !</span>
-                <a href="../../public/logout.php" class="nav-link btn-login" style="margin-left: 1rem;">Sair</a>
+                <a href="/AV2DAW/public/logout.php" class="nav-link btn-login" style="margin-left: 1rem;">Sair</a>
             `;
     } else {
       // Se não estiver logado, cria os botões de login e cadastro

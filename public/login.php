@@ -51,6 +51,7 @@ if ($tipo === 'admin') {
     $_SESSION['admin_id'] = $admin['id_admin'];
     $_SESSION['admin_nome'] = $admin['nome'];
     $_SESSION['admin_email'] = $admin['email'];
+    $_SESSION['tipo_usuario']  = 'admin';
     $_SESSION['admin_logado'] = true;
 
     echo json_encode([
@@ -85,6 +86,9 @@ if (!password_verify($senha, $senhaHash)) {
 $_SESSION['usuario_id'] = $id_cliente;
 $_SESSION['usuario_email'] = $emailDB;
 $_SESSION['usuario_nome'] = $nome;
+$_SESSION['tipo_usuario']  = 'cliente';
+$_SESSION['cliente_logado'] = true;
+
 
 // Suporte ao "lembrar login" (cookie opcional)
 if (!empty($_POST['lembrar'])) {
