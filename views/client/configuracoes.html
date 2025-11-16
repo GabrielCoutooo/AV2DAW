@@ -515,6 +515,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             listaLocacoesEl.innerHTML = '';
             locs.forEach(l => {
+                // LÓGICA PARA CONSTRUIR O CAMINHO DA IMAGEM
+                const IMAGES_BASE_PATH = '../../public/images/uploads/carros/';
+                const imgFileName = l.imagem && l.imagem.trim() !== '' ? l.imagem : 'default.png';
+                const imgPathFinal = IMAGES_BASE_PATH + imgFileName; // Caminho relativo completo
+                
                 const div = document.createElement('div');
                 div.className = 'locacao-item';
                 const statusClass = (s => {
@@ -524,13 +529,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (s.includes('retir') || s.includes('ativo')) return 'status-ativo';
                     return 'status-finalizado';
                 })(l.status);
+
                 div.innerHTML = `
                     <p><strong>#${l.id_locacao}</strong> — ${escapeHtml((l.marca||'') + ' ' + (l.nome_modelo||''))}</p>
                     <p><i class="fas fa-calendar-alt"></i> Retirada: ${formatDate(l.data_hora_retirada)} &nbsp; <i class="fas fa-calendar-check"></i> Devolução: ${formatDate(l.data_hora_prevista_devolucao)}</p>
                     <p>Valor: <strong>R$ ${formatNumber(l.valor_total)}</strong></p>
                     <span class="status-badge ${statusClass}">${l.status || 'Reservado'}</span>
                     &nbsp; <a href="/AV2DAW/views/client/checkout.php?id_locacao=${encodeURIComponent(l.id_locacao)}">Ver detalhes</a>
-                    <button class="btn-ocorrencia" data-locacao-id="${l.id_locacao}" data-modelo="${escapeHtml((l.marca||'') + ' ' + (l.nome_modelo||''))}" data-valor="${formatNumber(l.valor_total)}" data-status="${escapeHtml(l.status || '')}" style="background:#cc0000;color:#fff;border:none;padding:6px 10px;border-radius:6px;margin-left:8px;cursor:pointer;">Abrir Ocorrência</button>
+                    <button class="btn-ocorrencia"
+                        data-locacao-id="${escapeHtml(l.id_locacao)}"
+                        data-modelo="${escapeHtml((l.marca||'') + ' ' + (l.nome_modelo||''))}"
+                        data-valor="${escapeHtml(formatNumber(l.valor_total))}"
+                        data-status="${escapeHtml(l.status || '')}"
+                        data-img="${escapeHtml(imgPathFinal)}" 
+                        style="background:#cc0000;color:#fff;border:none;padding:6px 10px;border-radius:6px;margin-left:8px;cursor:pointer;">Abrir Ocorrência</button>
                 `;
                 listaLocacoesEl.appendChild(div);
 

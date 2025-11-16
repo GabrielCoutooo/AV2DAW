@@ -21,7 +21,7 @@ if ($id_cliente <= 0) {
 }
 
 $sql = "SELECT L.id_locacao, L.data_hora_retirada, L.data_hora_prevista_devolucao, L.status, L.valor_total,
-               V.id_veiculo, M.nome_modelo, M.marca
+               V.id_veiculo, M.nome_modelo, M.marca, M.imagem /* <-- Adicionado M.imagem */
         FROM LOCACAO L
         LEFT JOIN VEICULO V ON L.id_veiculo = V.id_veiculo
         LEFT JOIN MODELO M ON V.id_modelo = M.id_modelo
