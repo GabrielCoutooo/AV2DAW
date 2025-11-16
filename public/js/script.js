@@ -184,15 +184,14 @@ function renderizarCarros(carros, containerId) {
       });
     }
 
-    // Navegar para tela de pagamento com o veículo selecionado
+    // Navegar para tela de venda com o veículo selecionado
     const btnAlugar = card.querySelector(".btn-alugar");
     if (btnAlugar) {
       btnAlugar.addEventListener("click", () => {
         const id = carro.id_veiculo || carro.id || "";
         if (id) {
-          window.location.href = `/AV2DAW/views/client/checkout.html?id=${encodeURIComponent(
-            id
-          )}`;
+          // redireciona para venda.php (não checkout.html)
+          window.location.href = `/AV2DAW/views/client/venda.php?id_veiculo=${encodeURIComponent(id)}`;
         }
       });
     }
