@@ -1,0 +1,257 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #00bfff 0%, #0099cc 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+main {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 100%;
+    padding: 40px;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    color: #00bfff;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+h1::before {
+    content: "✓";
+    background-color: #27ae60;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.info-container {
+    margin-top: 30px;
+    border-left: 4px solid #00bfff;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+p strong {
+    color: #333;
+    font-weight: 600;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 3px solid #00bfff;
+}
+
+.info-row label {
+    font-weight: 600;
+    color: #333;
+    min-width: 150px;
+}
+
+.info-row span {
+    color: #00bfff;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.locacao-id {
+    background-color: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #cc0000;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.locacao-id p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.locacao-id .id-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #cc0000;
+}
+
+.veiculo-info {
+    background: linear-gradient(135deg, #f0f8ff 0%, #e0f7ff 100%);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border-left: 4px solid #00bfff;
+}
+
+.veiculo-info h3 {
+    color: #00bfff;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.veiculo-info p {
+    color: #555;
+    margin: 8px 0;
+}
+
+.valor-total {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 25px 0;
+    border: 2px solid #ffc107;
+}
+
+.valor-total label {
+    display: block;
+    color: #333;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+.valor-total .amount {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #cc0000;
+}
+
+.button-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+a {
+    flex: 1;
+    padding: 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    min-width: 150px;
+}
+
+a:first-of-type {
+    background-color: #00bfff;
+    color: white;
+}
+
+a:first-of-type:hover {
+    background-color: #0099cc;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 191, 255, 0.3);
+}
+
+a:last-of-type {
+    background-color: #27ae60;
+    color: white;
+}
+
+a:last-of-type:hover {
+    background-color: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+}
+
+.error-container {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    color: #721c24;
+}
+
+.error-container p {
+    color: #721c24;
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    main {
+        padding: 25px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h1::before {
+        width: 40px;
+        height: 40px;
+        font-size: 1.4rem;
+    }
+
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .info-row label {
+        min-width: auto;
+        margin-bottom: 8px;
+    }
+
+    .button-container {
+        flex-direction: column;
+    }
+
+    a {
+        min-width: auto;
+    }
+
+    .valor-total .amount {
+        font-size: 1.6rem;
+    }
+}
