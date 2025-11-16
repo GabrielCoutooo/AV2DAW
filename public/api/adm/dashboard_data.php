@@ -1,52 +1,116 @@
 <?php
-// Inclui arquivos essenciais (configuração e sessão)
-require_once __DIR__ . '/../../config/config.php';
+// Inclui arquivos essenciais (configuração e conexão)
+require_once __DIR__ . '/../../../config/connection.php';
+require_once __DIR__ . '/../../../config/auth-check.php';
 
-// Verifica a autenticação do administrador antes de retornar qualquer dado
-session_start();
-if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
-    http_response_code(401); // 401 Unauthorized
+// Inicia sessão caso não exista
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Verifica se o administrador está logado
+if (!adminEstaLogado()) {
+    http_response_code(401);
     echo json_encode(['error' => 'Acesso não autorizado. Faça login como Administrador.']);
     exit();
 }
 
-// Define o cabeçalho para retornar JSON
+// Define o cabeçalho JSON
 header('Content-Type: application/json; charset=UTF-8');
 
-// O código abaixo é a lógica de dados extraída do views/adm/index.php
-// EM UM PROJETO REAL: Estas simulações devem ser substituídas por consultas ao banco de dados (tabelas VEICULO, MODELO, etc.)
+$idVeiculo = $_GET['id_veiculo'] ?? null;
 
-$veiculos = [
-    ['id' => 1, 'modelo' => 'Koenigsegg', 'marca' => 'Koenigsegg', 'imagem' => 'https://images.unsplash.com/photo-1628889045175-6e31ce1d7b35?w=300', 'categoria' => 'Esportivo', 'disponivel' => true],
-    ['id' => 2, 'modelo' => 'Nissan GT-R', 'marca' => 'Nissan', 'imagem' => 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=300', 'categoria' => 'Esportivo', 'disponivel' => true],
-    ['id' => 3, 'modelo' => 'Rolls-Royce', 'marca' => 'Rolls-Royce', 'imagem' => 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=300', 'categoria' => 'Luxo', 'disponivel' => false],
-    ['id' => 4, 'modelo' => 'All New Rush', 'marca' => 'Toyota', 'imagem' => 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=300', 'categoria' => 'SUV', 'disponivel' => true],
-];
+// ================== VEÍCULOS ==================
+$veiculos = [];
+$sqlVeiculos = "
+    SELECT v.id_veiculo, m.nome_modelo AS modelo, m.marca, v.ano, m.categoria, v.cor, v.placa, m.preco_diaria_base, m.imagem, v.disponivel
+    FROM VEICULO v
+    JOIN MODELO m ON v.id_modelo = m.id_modelo
+";
+$result = $con->query($sqlVeiculos);
 
-$vendedores = [
-    ['nome' => 'CAUÁ', 'contato' => '(21) 96976-5432', 'turno' => '08:00 - 15:00', 'ultimo_modelo' => 'Nissan GT-R'],
-    ['nome' => 'SOUZA', 'contato' => '(21) 96543-2109', 'turno' => '15:00 - 22:00', 'ultimo_modelo' => 'All New Rush'],
-    ['nome' => 'ISAAS', 'contato' => '(21) 97654-3210', 'turno' => '15:00 - 22:00', 'ultimo_modelo' => 'Rolls-Royce'],
-];
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        // Ajusta caminho da imagem caso não seja URL
+        if (!filter_var($row['imagem'], FILTER_VALIDATE_URL)) {
+            $row['imagem'] = "/AV2DAW/public/images/uploads/carros/" . $row['imagem'];
+        }
+        $veiculos[] = $row;
+    }
+}
 
-$checklists = [
-    ['doc_cliente' => '485.780.362-19', 'modelo' => 'KOENIGSEGG', 'data' => '10/11/2024', 'tipo' => 'PÓS'],
-    ['doc_cliente' => '803.214.135-62', 'modelo' => 'KOENIGSEGG', 'data' => '10/09/2024', 'tipo' => 'PRÉ'],
-    ['doc_cliente' => '276.489.135-62', 'modelo' => 'ALL NEW RUSH', 'data' => '10/05/2024', 'tipo' => 'PÓS'],
-];
+// ================== VENDEDORES (ADMINS) ==================
+$vendedores = [];
+$sqlAdmins = "SELECT id_admin, nome, email FROM ADMIN";
+$result = $con->query($sqlAdmins);
 
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $vendedores[] = [
+            'nome' => $row['nome'],
+            'email' => $row['email'],
+            'turno' => '08:00 - 18:00', // exemplo, pode adaptar se tiver tabela de turnos
+        ];
+    }
+}
+
+// ================== CHECKLISTS (LOCAÇÕES) ==================
+$checklists = [];
+$sqlLocacoes = "
+    SELECT l.id_locacao, c.cpf AS doc_cliente, m.nome_modelo AS modelo, l.data_hora_retirada AS data, 
+           CASE WHEN l.status='Reservado' THEN 'PRÉ' ELSE 'PÓS' END AS tipo
+    FROM LOCACAO l
+    JOIN CLIENTE c ON l.id_cliente = c.id_cliente
+    JOIN VEICULO v ON l.id_veiculo = v.id_veiculo
+    JOIN MODELO m ON v.id_modelo = m.id_modelo
+    ORDER BY l.data_hora_retirada DESC
+    LIMIT 10
+";
+$result = $con->query($sqlLocacoes);
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $checklists[] = [
+            'doc_cliente' => $row['doc_cliente'],
+            'modelo' => $row['modelo'],
+            'data' => date('d/m/Y', strtotime($row['data'])),
+            'tipo' => $row['tipo']
+        ];
+    }
+}
+
+// ================== ESTATÍSTICAS ==================
 $estatisticas = [
-    'carros_alugados' => 36,
-    'carros_disponiveis' => 24,
-    'carros_manutencao' => 5,
-    'vendas_mes' => 42
+    'carros_alugados' => 0,
+    'carros_disponiveis' => 0,
+    'carros_manutencao' => 0,
+    'vendas_mes' => 0
 ];
 
-// Retorna todos os dados em um único JSON
+// Carros alugados (status = Retirado)
+$result = $con->query("SELECT COUNT(*) AS total FROM LOCACAO WHERE status='Retirado'");
+if ($row = $result->fetch_assoc()) $estatisticas['carros_alugados'] = (int)$row['total'];
+
+// Carros disponíveis
+$result = $con->query("SELECT COUNT(*) AS total FROM VEICULO WHERE disponivel=1");
+if ($row = $result->fetch_assoc()) $estatisticas['carros_disponiveis'] = (int)$row['total'];
+
+// Carros em manutenção (disponivel=0)
+$result = $con->query("SELECT COUNT(*) AS total FROM VEICULO WHERE disponivel=0");
+if ($row = $result->fetch_assoc()) $estatisticas['carros_manutencao'] = (int)$row['total'];
+
+// Vendas do mês (LOCACOES com data no mês atual)
+$result = $con->query("
+    SELECT COUNT(*) AS total 
+    FROM LOCACAO 
+    WHERE MONTH(data_hora_retirada) = MONTH(CURDATE()) 
+      AND YEAR(data_hora_retirada) = YEAR(CURDATE())
+");
+if ($row = $result->fetch_assoc()) $estatisticas['vendas_mes'] = (int)$row['total'];
+
+// ================== RETORNA JSON ==================
 echo json_encode([
     'veiculos' => $veiculos,
     'vendedores' => $vendedores,
     'checklists' => $checklists,
     'estatisticas' => $estatisticas
 ]);
-?>

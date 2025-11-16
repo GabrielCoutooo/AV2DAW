@@ -1,0 +1,7 @@
+2025-11-16 06:44:01 | Placa recebida: 'ACP4V44'
+2025-11-16 06:47:15 | Placa recebida: 'ZTN0F62'
+2025-11-16 06:48:10 | Placa recebida: 'ACP4V44'
+2025-11-16 06:48:21 | Placa recebida: 'ACP4V44'
+2025-11-16 06:49:29 | Placa recebida: 'ACP4V44'
+2025-11-16 06:51:46 | Placa recebida: 'ACP4V44'
+2025-11-16 06:53:33 | Placa recebida: 'LDR8U99'

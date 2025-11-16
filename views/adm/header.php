@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . "/../../config/config.php";
+require_once APP_PATH . '/config/auth-check.php';
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -183,6 +187,8 @@
             border-radius: 4px;
         }
     </style>
+    <link rel="stylesheet" href="../../public/css/style.css">
+
 </head>
 
 <body>
@@ -193,6 +199,6 @@
         <nav class="menu">
             <a href="index.php">Dashboard</a>
             <a href="vendas.php">Vender</a>
-            <a href="logout.php" style="background-color: #e74c3c;">Sair</a>
+            <a href="../../public/logout.php" style="background-color: #e74c3c;">Sair</a>
         </nav>
     </header>

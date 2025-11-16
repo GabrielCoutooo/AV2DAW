@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/config.php';
 // Conexão com MYSQLi usando constantes do config
 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 //Verificando erros de conexão
