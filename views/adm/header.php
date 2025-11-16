@@ -1,10 +1,10 @@
 <?php
-// Inicia a sessão (se não estiver iniciada pelo config.php)
-session_start();
+// Garante que as configurações (e o session_start() dentro delas) sejam carregadas.
+require_once __DIR__ . '/../../config/config.php'; // Inclui config e session_start()
 
 // VERIFICAÇÃO DE ACESSO ADMINISTRATIVO
 if (!isset($_SESSION['admin_logado']) || $_SESSION['admin_logado'] !== true) {
-    // Redireciona para a tela de login se não for admin (caminho absoluto)
+    // Redireciona para a tela de login se não for admin (caminho absoluto, mais seguro)
     header('Location: /php/AV2DAW/views/adm/login.html'); 
     exit(); 
 }
