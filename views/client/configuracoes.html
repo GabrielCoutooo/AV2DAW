@@ -745,5 +745,59 @@ document.addEventListener('DOMContentLoaded', () => {
     window.fecharModalOcorrencia = window.fecharModalOcorrencia;
 })();
 </script>
+
+    <!-- modal de ocorrência -->
+    <div id="modalOcorrencia" class="modal-ocorrencia" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:1200;align-items:center;justify-content:center;">
+        <div class="modal-ocorrencia-conteudo" style="width:95%;max-width:900px;background:#fff;border-radius:12px;overflow:hidden;">
+            <header style="background:#000;padding:14px 18px;color:#fff;display:flex;align-items:center;gap:12px;">
+                <img src="../../public/images/logo.png" alt="ALUCAR" style="height:34px;">
+                <h3 style="margin:0;font-size:1.05rem;">Ocorrência — Locação #<span id="ocorrencia-id-locacao">0</span></h3>
+                <button type="button" onclick="fecharModalOcorrencia()" style="margin-left:auto;background:transparent;border:none;color:#fff;font-size:1.6rem;cursor:pointer;">&times;</button>
+            </header>
+
+            <div style="padding:22px;display:grid;grid-template-columns:2fr 1fr;gap:20px;">
+                <div>
+                    <div style="display:flex;gap:16px;align-items:center;margin-bottom:18px;">
+                        <img id="ocorrencia-veiculo-img" src="../../public/images/uploads/carros/default.png" alt="veículo" style="width:110px;height:70px;object-fit:cover;border-radius:6px;border:1px solid #eee;">
+                        <div>
+                            <div id="ocorrencia-veiculo-nome" style="font-weight:700;color:#222;">Carregando modelo</div>
+                            <div id="ocorrencia-veiculo-specs" style="color:#666;font-size:0.9rem;">Categoria • Specs</div>
+                        </div>
+                    </div>
+
+                    <form id="form-ocorrencia">
+                        <div style="display:flex;flex-direction:column;gap:12px;">
+                            <label><input type="checkbox" name="tipo_ocorrencia[]" value="Carro com defeito"> Carro com defeito</label>
+                            <label><input type="checkbox" name="tipo_ocorrencia[]" value="Veículo furtado"> Veículo furtado</label>
+                            <label><input type="checkbox" name="tipo_ocorrencia[]" value="Problema de pagamento"> Problema de pagamento</label>
+                            <label><input type="checkbox" name="tipo_ocorrencia[]" value="Outro"> Outro</label>
+
+                            <label style="margin-top:6px;font-weight:600;">Detalhes</label>
+                            <textarea name="detalhes_outros" rows="4" placeholder="Descreva a ocorrência (local, horário, testemunhas etc.)" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;"></textarea>
+
+                            <div style="display:flex;gap:10px;margin-top:8px;">
+                                <button type="submit" class="btn-salvar" style="background:#cc0000;color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;">Registrar Ocorrência</button>
+                                <button type="button" onclick="fecharModalOcorrencia()" style="background:#777;color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;">Fechar</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div style="margin-top:18px;padding:14px;background:linear-gradient(135deg,#f0f8ff,#e8f6ff);border-left:4px solid #00bfff;border-radius:8px;">
+                        <h4 style="margin:0 0 8px 0;color:#00bfff;">Situação</h4>
+                        <p id="ocorrencia-status" style="font-weight:700;color:#cc0000;margin:0;">AGUARDANDO REGISTRO</p>
+                        <p style="margin-top:6px;color:#555;font-size:0.9rem;">Após registro, o status será atualizado para EM ANÁLISE.</p>
+                    </div>
+                </div>
+
+                <aside style="border-left:1px solid #eee;padding-left:18px;">
+                    <h4 style="margin-top:0;color:#333;">Resumo da Reserva</h4>
+                    <p style="margin:8px 0;">Valor Total: <strong id="ocorrencia-valor-total" style="color:#cc0000;">R$ 0,00</strong></p>
+                    <p style="margin:8px 0;">Status atual: <span id="ocorrencia-status-resumo">—</span></p>
+                    <p style="margin-top:14px;color:#666;font-size:0.9rem;">As ocorrências são analisadas pela equipe. Você será notificado por email.</p>
+                </aside>
+            </div>
+        </div>
+    </div>
+    <!-- fim modal de ocorrência -->
 </body>
 </html>
