@@ -1,7 +1,7 @@
 Array
 (
-    [email] => jeffersoncorreia425@gmail.com
+    [tipo] => admin
+    [email] => admin@alucar.com
     [senha] => 123456
     [lembrar] => on
-    [tipo] => cliente
 )

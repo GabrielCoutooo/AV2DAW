@@ -305,6 +305,14 @@ function renderVendedores(vendedores, container) {
 function renderChecklists(checklists, container) {
   container.innerHTML = "";
   checklists.forEach((checklist) => {
+    // Determine se a locação está PRÉ (Reservado) ou PÓS (Devolvido)
+    // Se o status é Reservado, a ação é iniciar a Retirada (Check-out)
+    // Se o status é PÓS/Devolvido, a ação é a Vistoria de Devolução (Check-in)
+    const acaoTexto = checklist.tipo === 'PRÉ' ? 'Abrir Check-out' : 'Abrir Check-in';
+    
+    // O seu Check-in/Vistoria lida com o ID da locação.
+    const idLocacao = checklist.id_locacao;
+    
     const row = `
       <tr>
         <td>${checklist.doc_cliente}</td>
@@ -312,8 +320,8 @@ function renderChecklists(checklists, container) {
         <td>${checklist.data}</td>
         <td>${checklist.tipo}</td>
         <td>
-          <button class="btn btn-success" onclick="verChecklist('${checklist.doc_cliente}', '${checklist.data}')">
-            Abrir Checklist
+          <button class="btn btn-success" onclick="abrirCheckin(${idLocacao})">
+            ${acaoTexto}
           </button>
         </td>
       </tr>
@@ -403,3 +411,167 @@ async function carregarDashboard() {
 
 // Event listener para atualizar o dashboard
 document.addEventListener("atualizarDashboard", carregarDashboard);
+
+// ============ FUNÇÕES DE CHECK-IN E CHECK-OUT ============
+function abrirCheckin(idLocacao) {
+  if (!idLocacao) {
+    alert('ID da locação inválido.');
+    return;
+  }
+  // Redireciona para a página de check-in
+  window.location.href = `../adm/checkin.php?id_locacao=${encodeURIComponent(idLocacao)}`;
+}
+
+function abrirCheckout(idLocacao) {
+  // Lógica para abrir o check-out
+  console.log("Abrir check-out para locação ID:", idLocacao);
+  // Aqui você pode carregar os dados da locação e abrir um modal ou redirecionar para outra página
+}
+
+// ============ FUNÇÕES DE AÇÃO EM MASSA ============
+function acaoEmMassa(acao) {
+  const checkboxes = document.querySelectorAll('input[name="veiculoSelecionado"]:checked');
+  const idsSelecionados = Array.from(checkboxes).map((cb) => cb.value);
+
+  if (idsSelecionados.length === 0) {
+    return alert("Nenhum veículo selecionado!");
+  }
+
+  if (acao === "excluir") {
+    if (confirm("Tem certeza que deseja excluir os veículos selecionados?")) {
+      // Chamar a função de exclusão em massa
+      excluirEmMassa(idsSelecionados);
+    }
+  } else if (acao === "editar") {
+    if (idsSelecionados.length === 1) {
+      // Se apenas um veículo for selecionado, abrir o modal de edição
+      const veiculoSelecionado = idsSelecionados[0];
+      abrirModalEdicao(veiculoSelecionado);
+    } else {
+      alert("Selecione apenas um veículo para editar.");
+    }
+  } else {
+    alert("Ação desconhecida.");
+  }
+}
+
+function excluirEmMassa(ids) {
+  const formData = new FormData();
+  formData.append("acao", "deletarEmMassa");
+  ids.forEach((id) => formData.append("ids[]", id));
+
+  fetch("/AV2DAW/views/adm/remover_veiculo.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.success) {
+        alert("Veículos excluídos com sucesso!");
+        document.dispatchEvent(new Event("atualizarDashboard"));
+      } else {
+        alert("Erro: " + result.error);
+      }
+    })
+    .catch((err) => {
+      console.error("Erro ao excluir em massa:", err);
+      alert("Erro ao excluir veículos!");
+    });
+}
+
+// ============ FUNÇÕES DE FILTRO E BUSCA ============
+function aplicarFiltros() {
+  const modelo = document.getElementById("filtroModelo").value;
+  const marca = document.getElementById("filtroMarca").value;
+  const ano = document.getElementById("filtroAno").value;
+  const categoria = document.getElementById("filtroCategoria").value;
+  const cor = document.getElementById("filtroCor").value;
+  const placa = document.getElementById("filtroPlaca").value;
+  const disponivel = document.getElementById("filtroDisponivel").value;
+
+  const filtros = {
+    modelo,
+    marca,
+    ano,
+    categoria,
+    cor,
+    placa,
+    disponivel: disponivel === "1" ? true : disponivel === "0" ? false : null,
+  };
+
+  // Atualizar a URL com os parâmetros de filtro
+  const url = new URL(window.location);
+  Object.keys(filtros).forEach((key) => url.searchParams.set(key, filtros[key]));
+  window.history.pushState({}, "", url);
+
+  // Recarregar o dashboard com os novos filtros
+  carregarDashboard();
+}
+
+function limparFiltros() {
+  document.getElementById("filtroModelo").value = "";
+  document.getElementById("filtroMarca").value = "";
+  document.getElementById("filtroAno").value = "";
+  document.getElementById("filtroCategoria").value = "";
+  document.getElementById("filtroCor").value = "";
+  document.getElementById("filtroPlaca").value = "";
+  document.getElementById("filtroDisponivel").value = "";
+
+  // Remover parâmetros de filtro da URL
+  const url = new URL(window.location);
+  Object.keys(filtros).forEach((key) => url.searchParams.delete(key));
+  window.history.pushState({}, "", url);
+
+  // Recarregar o dashboard sem filtros
+  carregarDashboard();
+}
+
+// ============ FUNÇÕES DE AJUDA E SUPORTE ============
+function abrirAjuda() {
+  const modal = document.getElementById("modalAjuda");
+  if (!modal) {
+    console.error("Modal de ajuda não encontrado!");
+    return;
+  }
+  modal.style.display = "flex";
+}
+
+function fecharAjuda() {
+  const modal = document.getElementById("modalAjuda");
+  if (!modal) {
+    console.error("Modal de ajuda não encontrado!");
+    return;
+  }
+  modal.style.display = "none";
+}
+
+// ============ EVENT LISTENERS GLOBAIS ============
+window.addEventListener("click", function (e) {
+  const modals = ["modalCadastro", "modalEdicao", "modalAjuda"];
+  modals.forEach((modalId) => {
+    const modal = document.getElementById(modalId);
+    if (modal && e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+});
+
+window.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") {
+    fecharModalCadastro();
+    fecharModalEdicao();
+    fecharAjuda();
+  }
+});
+
+// ============ INICIALIZAÇÃO ============
+document.addEventListener("DOMContentLoaded", function () {
+  // Inicializar tooltips
+  const tooltips = document.querySelectorAll("[data-tooltip]");
+  tooltips.forEach((tooltip) => {
+    new Tooltip(tooltip);
+  });
+
+  // Carregar dados iniciais
+  carregarDashboard();
+});

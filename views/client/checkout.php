@@ -64,7 +64,7 @@ if ($id_locacao && isset($con)) {
 
             <div class="button-container">
                 <a href="/AV2DAW/views/client/index.html"><i class="fas fa-home"></i> Voltar à Home</a>
-                <a href="/AV2DAW/views/client/venda.php"><i class="fas fa-car-side"></i> Alugar Outro Carro</a>
+                <a href="/AV2DAW/views/client/configuracoes.html#minhas-locacoes"><i class="fas fa-history"></i> Acessar histórico</a>
             </div>
 
         <?php else: ?>

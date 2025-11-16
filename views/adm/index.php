@@ -181,6 +181,18 @@ require_once APP_PATH . "/config/auth-check.php";
         </form>
     </div>
 </div>
+<script>
+    // Função global usada pelo JS do dashboard para abrir a página de Check-in
+    function abrirCheckin(id_locacao) {
+        if (!id_locacao) {
+            alert('ID da locação inválido.');
+            return;
+        }
+        // CORREÇÃO: usar caminho absoluto a partir da raiz do projeto para evitar 404
+        window.location.href = `/AV2DAW/views/adm/checkin.php?id_locacao=${encodeURIComponent(id_locacao)}`;
+    }
+</script>
+
 <script src="../../public/js/adm_dashboard.js"></script>
 
 </body>

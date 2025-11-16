@@ -66,10 +66,11 @@ $sqlLocacoes = "
     ORDER BY l.data_hora_retirada DESC
     LIMIT 10
 ";
-$result = $con->query($sqlLocacoes);
-if ($result) {
+
+if ($result = $con->query($sqlLocacoes)) {
     while ($row = $result->fetch_assoc()) {
         $checklists[] = [
+            'id_locacao' => $row['id_locacao'],
             'doc_cliente' => $row['doc_cliente'],
             'modelo' => $row['modelo'],
             'data' => date('d/m/Y', strtotime($row['data'])),
