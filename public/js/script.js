@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
   carregarVeiculosHomePage();
+  inicializarFiltroDisponibilidade();
 });
 async function carregarVeiculosHomePage() {
   try {
@@ -132,12 +133,157 @@ function renderizarCarros(carros, containerId) {
     </div>
     <div class="card-footer">
         <div class="carro-preco">
-            <strong>${precoFormatado}</strong>/semana
+            <strong>${precoFormatado}</strong>/dia
             <s>R$100,00</s> </div>
         <button class="btn-alugar">Alugue</button>
     </div>
 `;
 
     container.appendChild(card);
+
+    // Adicionar funcionalidade de favorito ao coração
+    const btnLike = card.querySelector(".btn-like");
+    if (btnLike) {
+      // Verificar se o veículo está favoritado no localStorage
+      const favoritosArmazenados = JSON.parse(
+        localStorage.getItem("veiculosFavoritos") || "[]"
+      );
+      const idVeiculo = String(carro.id_veiculo || carro.id || "");
+
+      if (favoritosArmazenados.includes(idVeiculo)) {
+        btnLike.classList.add("liked");
+        btnLike.innerHTML = "♥";
+      }
+
+      btnLike.addEventListener("click", (e) => {
+        e.stopPropagation();
+        btnLike.classList.toggle("liked");
+
+        if (btnLike.classList.contains("liked")) {
+          btnLike.innerHTML = "♥";
+          // Adicionar aos favoritos
+          if (!favoritosArmazenados.includes(idVeiculo)) {
+            favoritosArmazenados.push(idVeiculo);
+            localStorage.setItem(
+              "veiculosFavoritos",
+              JSON.stringify(favoritosArmazenados)
+            );
+          }
+        } else {
+          btnLike.innerHTML = "♡";
+          // Remover dos favoritos
+          const index = favoritosArmazenados.indexOf(idVeiculo);
+          if (index > -1) {
+            favoritosArmazenados.splice(index, 1);
+            localStorage.setItem(
+              "veiculosFavoritos",
+              JSON.stringify(favoritosArmazenados)
+            );
+          }
+        }
+      });
+    }
+
+    // Navegar para tela de pagamento com o veículo selecionado
+    const btnAlugar = card.querySelector(".btn-alugar");
+    if (btnAlugar) {
+      btnAlugar.addEventListener("click", () => {
+        const id = carro.id_veiculo || carro.id || "";
+        if (id) {
+          window.location.href = `/AV2DAW/views/client/checkout.html?id=${encodeURIComponent(
+            id
+          )}`;
+        }
+      });
+    }
+  });
+}
+
+// === Filtro de disponibilidade ===
+let cacheTodosVeiculos = [];
+async function inicializarFiltroDisponibilidade() {
+  const form = document.getElementById("form-busca-veiculos");
+  const selModelos = document.getElementById("modelos");
+  const inputPesquisa = document.getElementById("pesquisa");
+  const inputData = document.getElementById("data");
+  const inputHora = document.getElementById("horario");
+  if (!form) return;
+
+  // Carrega base inicial para popular select de modelos
+  try {
+    const resp = await fetch("../../public/api/client/listar-veiculos.php");
+    const json = await resp.json();
+    if (!resp.ok || json.error) return;
+    cacheTodosVeiculos = [
+      ...(json.populares || []),
+      ...(json.recomendados || []),
+      ...(json.suv || []),
+      ...(json.outros || []),
+    ];
+    const modelosUnicos = [];
+    const seen = new Set();
+    cacheTodosVeiculos.forEach((v) => {
+      if (!seen.has(v.id_modelo)) {
+        seen.add(v.id_modelo);
+        modelosUnicos.push(v);
+      }
+    });
+    modelosUnicos.sort((a, b) => a.nome_modelo.localeCompare(b.nome_modelo));
+    modelosUnicos.forEach((m) => {
+      const opt = document.createElement("option");
+      opt.value = m.id_modelo;
+      opt.textContent = m.nome_modelo;
+      selModelos.appendChild(opt);
+    });
+  } catch (e) {
+    console.warn("Falha ao popular modelos", e);
+  }
+
+  function montarQueryParams() {
+    const tipo =
+      form.querySelector('input[name="tipo"]:checked')?.value || "retirada";
+    const data = inputData.value;
+    const hora = inputHora.value;
+    const modeloId = selModelos.value;
+    const q = inputPesquisa.value.trim();
+    const params = new URLSearchParams();
+    params.set("tipo", tipo);
+    if (data) params.set("data", data);
+    if (hora) params.set("hora", hora);
+    if (modeloId) params.set("modelo_id", modeloId);
+    if (q) params.set("q", q);
+    return params.toString();
+  }
+
+  async function consultarDisponibilidade(e) {
+    if (e) e.preventDefault();
+    const qs = montarQueryParams();
+    try {
+      const resp = await fetch(
+        `../../public/api/client/disponibilidade.php?${qs}`
+      );
+      const data = await resp.json();
+      if (!resp.ok || data.error) {
+        console.warn("Erro disponibilidade", data.error);
+        return;
+      }
+      // Renderiza resultado em grid "todos"
+      renderizarCarros(data.veiculos, "todos-grid");
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // Submeter form
+  form.addEventListener("submit", consultarDisponibilidade);
+  // Filtros reativos
+  [selModelos, inputPesquisa, inputData, inputHora].forEach((el) => {
+    if (el) el.addEventListener("change", consultarDisponibilidade);
+    if (el && el === inputPesquisa)
+      el.addEventListener("input", () => {
+        // debounce simples
+        clearTimeout(inputPesquisa._t);
+        inputPesquisa._t = setTimeout(consultarDisponibilidade, 300);
+      });
   });
 }

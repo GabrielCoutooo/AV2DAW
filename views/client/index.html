@@ -20,7 +20,7 @@
             <nav class="nav-links">
                 <a href="#inicio" class="nav-link">Início</a>
                 <a href="#servicos" class="nav-link">Serviços</a>
-                <a href="#contato" class="nav-link">configurações</a>
+                <a href="contato.html" class="nav-link">Contato</a>
             </nav>
             <!-- Este container será preenchido dinamicamente pelo JavaScript -->
             <div class="login-btn" id="user-auth-container">
@@ -40,7 +40,7 @@
     <section class="secao-busca">
         <div class="container-busca">
             <h2 class="titulo-busca">VERIFIQUE OS MODELOS DISPONÍVEIS!</h2>
-            <form class="formulario-busca">
+            <form class="formulario-busca" id="form-busca-veiculos">
                 <div class="grupo-formulario">
                     <label for="retirada">Retirada</label>
                     <div class="linha-formulario">
@@ -59,12 +59,12 @@
 
                 <div class="grupo-formulario">
                     <label for="data">Data</label>
-                    <input type="date" id="data" name="data" class="entrada-formulario">
+                    <input type="date" id="data" name="data" class="entrada-formulario" />
                 </div>
 
                 <div class="grupo-formulario">
                     <label for="horario">Horário</label>
-                    <input type="time" id="horario" name="horario" class="entrada-formulario">
+                    <input type="time" id="horario" name="horario" class="entrada-formulario" />
                 </div>
 
                 <div class="grupo-formulario">
@@ -76,10 +76,10 @@
 
                 <div class="grupo-formulario">
                     <input type="search" id="pesquisa" name="pesquisa" placeholder="Digite sua pesquisa..."
-                        class="entrada-pesquisa">
+                        class="entrada-pesquisa" />
                 </div>
 
-                <button type="submit" class="botao-busca">
+                <button type="submit" class="botao-busca" id="btn-filtrar">
                     <span class="icone-botao">✓</span>
                 </button>
             </form>
@@ -143,7 +143,7 @@
                     <li><a href="#como-funciona" class="link-footer">Como funciona</a></li>
                     <li><a href="#carros-populares" class="link-footer">Carros Populares</a></li>
                     <li><a href="#parcerias" class="link-footer">Parcerias</a></li>
-                    <li><a href="#duvidas" class="link-footer">Dúvidas Frequentes</a></li>
+                    <li><a href="contato.html" class="link-footer">Dúvidas Frequentes</a></li>
                 </ul>
             </div>
 

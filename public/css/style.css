@@ -852,6 +852,15 @@ body {
     font-size: 24px;
     padding: 0;
     color: #E0E0E0; /* Coração cinza (não curtido) */
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-like:hover {
+    transform: scale(1.1);
+}
+
+.btn-like.liked {
+    color: #EF4444; /* Coração vermelho (curtido) */
 }
 
 .btn-like.active {
@@ -939,6 +948,247 @@ body {
 .btn-alugar:hover {
     background-color: #2563EB; /* Azul mais escuro no hover */
 }
+
+/* ====== CHECKOUT (Pagamento) ====== */
+.checkout-container{
+    max-width: 1200px;
+    margin: 32px auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+}
+
+.checkout-vehicle-card{
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.checkout-vehicle-card .vehicle-media{
+    background: #f7f7f7;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+}
+.checkout-vehicle-card .vehicle-media img{
+    max-width: 100%;
+    max-height: 140px;
+    object-fit: contain;
+}
+.checkout-vehicle-card .vehicle-info h1{
+    font-size: 32px;
+    margin: 0 0 4px 0;
+}
+.vehicle-category{ color:#777; margin-bottom:8px; }
+.vehicle-specs{ display:flex; gap:16px; color:#777; margin-bottom:8px; }
+.vehicle-protection{ color:#7a7a7a; font-size:14px; }
+
+.checkout-itinerary{
+    background:#fff;
+    border-radius:12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    padding: 16px;
+}
+.itinerary-row{ display:grid; grid-template-columns: 1.2fr 1fr; gap: 16px; align-items:center; }
+.date-line{ display:flex; align-items:center; gap:8px; }
+.date-badge{ background:#eee; border-radius:6px; padding:2px 8px; font-size:12px; color:#555; }
+.muted{ color:#9A9A9A; }
+.mini-map{ background:#e9eef3; height:200px; display:flex; align-items:center; justify-content:center; border-radius:10px; }
+.btn-secondary{ background:#1e90ff; color:#fff; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; }
+
+.checkout-right .checkout-summary{
+    background:#fff;
+    border-radius:12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    padding: 20px;
+}
+.summary-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.summary-badge{ background:#b50808; color:#fff; padding:8px 12px; border-radius:12px; font-weight:600; }
+.summary-line{ display:flex; align-items:center; justify-content:space-between; padding:10px 0; }
+.summary-divider{ height:1px; background:#ececec; }
+.summary-total{ display:flex; align-items:center; justify-content:space-between; font-size:18px; margin: 14px 0; }
+.btn-pay{ width:100%; background:#cf1e1e; color:#fff; border:none; border-radius:12px; padding:16px; font-size:18px; font-weight:800; cursor:pointer; }
+.btn-pay:hover{ background:#a31515; }
+
+/* Estilos para inputs do checkout */
+.input-datetime,
+.input-location,
+.input-diarias {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Arial', sans-serif;
+    transition: all 0.2s ease;
+    background-color: #fff;
+}
+
+.input-datetime:focus,
+.input-location:focus,
+.input-diarias:focus {
+    outline: none;
+    border-color: #1e90ff;
+    box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.1);
+}
+
+.input-datetime:hover,
+.input-location:hover,
+.input-diarias:hover {
+    border-color: #9ca3af;
+}
+
+.input-diarias {
+    width: 90px;
+    text-align: right;
+    font-weight: 600;
+    color: #333;
+}
+
+.input-datetime {
+    color: #374151;
+    cursor: pointer;
+}
+
+.input-datetime::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: opacity(0.6);
+    transition: filter 0.2s ease;
+}
+
+.input-datetime::-webkit-calendar-picker-indicator:hover {
+    filter: opacity(1);
+}
+
+.input-location {
+    color: #374151;
+}
+
+.input-location::placeholder {
+    color: #9ca3af;
+}
+
+#price-display {
+    color: #059669;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+@media (max-width: 960px){
+  .checkout-container{ grid-template-columns: 1fr; }
+}
+
+/* ====== FAQ / CONTATO ====== */
+.faq-section {
+    min-height: 100vh;
+    background-color: #f4f4f4;
+    padding: 60px 20px;
+}
+
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 50px;
+    color: #000;
+    letter-spacing: 1px;
+}
+
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.faq-item {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.faq-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.faq-question {
+    width: 100%;
+    background: #00bfff;
+    color: #000;
+    border: none;
+    padding: 20px 25px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.faq-question:hover {
+    background: #0099cc;
+}
+
+.faq-question span {
+    flex: 1;
+    letter-spacing: 0.5px;
+}
+
+.faq-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    margin-left: 15px;
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    background: #000;
+    color: #fff;
+}
+
+.faq-answer p {
+    padding: 20px 25px;
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.faq-item.active .faq-answer {
+    border-top: 2px solid #00bfff;
+}
+
+@media (max-width: 768px) {
+    .faq-title {
+        font-size: 2rem;
+    }
+    
+    .faq-question {
+        font-size: 0.9rem;
+        padding: 15px 20px;
+    }
+    
+    .faq-answer p {
+        font-size: 0.9rem;
+        padding: 15px 20px;
+    }
+}
+
 /* Admin */
 .modal {
     position: fixed;

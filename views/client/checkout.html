@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALUCAR - Pagamento</title>
+    <link rel="icon" href="../../public/images/logosemfundo.png" type="image/png" />
+    <link rel="stylesheet" href="../../public/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <img src="../../public/images/logo.png" alt="ALUCAR Logo" class="logo-img" />
+            </div>
+            <nav class="nav-links">
+                <a href="index.html#inicio" class="nav-link">Início</a>
+                <a href="#servicos" class="nav-link">Serviços</a>
+                <a href="#contato" class="nav-link">Contato</a>
+            </nav>
+            <div class="login-btn" id="user-auth-container"></div>
+        </div>
+    </header>
+
+    <main class="checkout">
+        <div class="checkout-container">
+            <!-- Coluna Esquerda: Detalhes do veículo e retirada/devolução -->
+            <section class="checkout-left">
+                <div class="checkout-vehicle-card" id="vehicle-card">
+                    <div class="vehicle-media">
+                        <img id="vehicle-image" alt="Veículo" />
+                    </div>
+                    <div class="vehicle-info">
+                        <h1 id="vehicle-name">Veículo</h1>
+                        <p id="vehicle-category" class="vehicle-category">Categoria</p>
+                        <div class="vehicle-specs">
+                            <span><i class="fas fa-gas-pump"></i> <span id="spec-fuel">90L</span></span>
+                            <span><i class="fas fa-cogs"></i> <span id="spec-gear">-</span></span>
+                            <span><i class="fas fa-user-friends"></i> <span id="spec-people">-</span> Pessoas</span>
+                        </div>
+                        <p class="vehicle-protection"><i class="fas fa-shield-alt"></i> Proteção do veículo e contra
+                            roubo</p>
+                    </div>
+                </div>
+
+                <div class="checkout-itinerary">
+                    <div class="itinerary-row">
+                        <div class="itinerary-dates">
+                            <div class="date-line" style="margin-bottom:8px;">
+                                <strong>Retirada</strong>
+                                <span class="date-badge" id="rent-days">1 diária</span>
+                            </div>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom:8px;">
+                                <input type="datetime-local" id="pickup-dt" class="input-datetime" />
+                                <input type="datetime-local" id="dropoff-dt" class="input-datetime" />
+                            </div>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <input type="text" id="pickup-loc" placeholder="Local de retirada"
+                                    class="input-location" />
+                                <input type="text" id="dropoff-loc" placeholder="Local de devolução"
+                                    class="input-location" />
+                            </div>
+                            <p class="muted" id="pickup-date" style="margin-top:6px;"></p>
+                        </div>
+                        <div class="itinerary-map">
+                            <div class="mini-map">
+                                <button class="btn-secondary" id="btn-change-location" type="button">Alterar
+                                    Local</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Coluna Direita: Resumo e pagamento -->
+            <aside class="checkout-right">
+                <div class="checkout-summary">
+                    <div class="summary-header">
+                        <h2>Sua Reserva</h2>
+                        <div class="summary-badge" id="summary-days">1 dia</div>
+                    </div>
+                    <div class="summary-line">
+                        <span>Diárias</span>
+                        <input type="number" id="days-input" min="1" value="1" class="input-diarias" />
+                    </div>
+                    <div class="summary-divider"></div>
+                    <div class="summary-line">
+                        <span>Preço por diária</span>
+                        <strong id="price-display">R$ 0,00</strong>
+                    </div>
+                    <div class="summary-divider"></div>
+                    <div class="summary-line">
+                        <span>Valor do Veículo</span>
+                        <strong id="sum-vehicle">R$0,00</strong>
+                    </div>
+                    <div class="summary-divider"></div>
+                    <div class="summary-line">
+                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                            <input type="checkbox" id="ins-opt" checked />
+                            Seguro
+                        </label>
+                        <strong id="sum-insurance">R$0,00</strong>
+                    </div>
+                    <div class="summary-divider"></div>
+                    <div class="summary-line">
+                        <span>Taxa da Locadora</span>
+                        <strong id="sum-fee">R$0,00</strong>
+                    </div>
+                    <div class="summary-divider"></div>
+                    <div class="summary-total">
+                        <span>Valor Total:</span>
+                        <strong id="sum-total">R$0,00</strong>
+                    </div>
+                    <button class="btn-pay" id="btn-pay">PAGAR</button>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script src="../../public/js/checkout.js"></script>
+    <script src="../../public/js/auth-header.js"></script>
+</body>
+
+</html>
