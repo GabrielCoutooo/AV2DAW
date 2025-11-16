@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - ALUCAR</title>
+    <link rel="icon" href="../../public/images/logosemfundo.png" type="image/png">
+    <link rel="stylesheet" href="../../public/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .container-configuracoes {
+            background-color: #f5f5f5;
+            min-height: 90vh;
+            padding: 40px 20px;
+        }
+
+        .layout-config {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .sidebar-config {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            height: fit-content;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-config {
+            list-style: none;
+        }
+
+        .menu-config li {
+            margin-bottom: 5px;
+        }
+
+        .menu-config a {
+            display: block;
+            padding: 12px 15px;
+            color: #555;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .menu-config a:hover,
+        .menu-config a.active {
+            background-color: #00bfff;
+            color: white;
+        }
+
+        .conteudo-config {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .secao-config {
+            display: none;
+        }
+
+        .secao-config.ativa {
+            display: block;
+        }
+
+        .titulo-secao {
+            color: #00bfff;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .formulario-config {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .grupo-config {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .grupo-config label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .grupo-config input,
+        .grupo-config select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .grupo-config input:focus,
+        .grupo-config select:focus {
+            outline: none;
+            border-color: #00bfff;
+            box-shadow: 0 0 5px rgba(0, 191, 255, 0.3);
+        }
+
+        .btn-salvar {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: fit-content;
+        }
+
+        .btn-salvar:hover {
+            background-color: #229954;
+        }
+
+        .btn-sair {
+            background-color: #cc0000;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: fit-content;
+        }
+
+        .btn-sair:hover {
+            background-color: #a00000;
+        }
+
+        .info-usuario {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #00bfff;
+            margin-bottom: 20px;
+        }
+
+        .info-usuario p {
+            color: #555;
+            margin: 8px 0;
+        }
+
+        .info-usuario strong {
+            color: #333;
+        }
+
+        .locacoes-container {
+            margin-top: 20px;
+        }
+
+        .locacao-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #00bfff;
+            margin-bottom: 15px;
+        }
+
+        .locacao-item p {
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status-reservado {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-ativo {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-finalizado {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .mensagem-sucesso {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .mensagem-erro {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media (max-width: 900px) {
+            .layout-config {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-config {
+                display: flex;
+                gap: 10px;
+                overflow-x: auto;
+            }
+
+            .menu-config {
+                display: flex;
+                gap: 10px;
+                list-style: none;
+            }
+
+            .menu-config li {
+                margin-bottom: 0;
+            }
+
+            .menu-config a {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header/Navbar -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <img src="../../public/images/logo.png" alt="ALUCAR Logo" class="logo-img">
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Início</a>
+                <a href="configuracoes.html" class="nav-link">Configurações</a>
+                <a href="contato.html" class="nav-link">Contato</a>
+            </nav>
+            <div class="login-btn" id="user-auth-container"></div>
+        </div>
+    </header>
+
+    <div class="container-configuracoes">
+        <div class="layout-config">
+            <!-- Sidebar com Menu -->
+            <aside class="sidebar-config">
+                <ul class="menu-config">
+                    <li><a href="#perfil" class="menu-item active" data-secao="perfil"><i class="fas fa-user"></i> Perfil</a></li>
+                    <li><a href="#minhas-locacoes" class="menu-item" data-secao="locacoes"><i class="fas fa-car"></i> Minhas Locações</a></li>
+                    <li><a href="#seguranca" class="menu-item" data-secao="seguranca"><i class="fas fa-lock"></i> Segurança</a></li>
+                    <li><a href="#pagamentos" class="menu-item" data-secao="pagamentos"><i class="fas fa-credit-card"></i> Pagamentos</a></li>
+                </ul>
+            </aside>
+
+            <!-- Conteúdo Principal -->
+            <main class="conteudo-config">
+                <div id="msg-sucesso" class="mensagem-sucesso"></div>
+                <div id="msg-erro" class="mensagem-erro"></div>
+
+                <!-- Seção Perfil -->
+                <section id="perfil" class="secao-config ativa">
+                    <h2 class="titulo-secao"><i class="fas fa-user-circle"></i> Meu Perfil</h2>
+                    
+                    <div class="info-usuario" id="info-usuario">
+                        <p><strong>Nome:</strong> <span id="nome-usuario">Carregando...</span></p>
+                        <p><strong>Email:</strong> <span id="email-usuario">Carregando...</span></p>
+                        <p><strong>Telefone:</strong> <span id="telefone-usuario">Carregando...</span></p>
+                        <p><strong>CPF:</strong> <span id="cpf-usuario">Carregando...</span></p>
+                    </div>
+
+                    <form class="formulario-config" id="form-perfil">
+                        <div class="grupo-config">
+                            <label for="nome">Nome Completo</label>
+                            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                        </div>
+
+                        <div class="grupo-config">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                        </div>
+
+                        <div class="grupo-config">
+                            <label for="telefone">Telefone</label>
+                            <input type="tel" id="telefone" name="telefone" placeholder="(00) 9 0000-0000">
+                        </div>
+
+                        <div class="grupo-config">
+                            <label for="cpf">CPF</label>
+                            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" readonly>
+                        </div>
+
+                        <button type="submit" class="btn-salvar"><i class="fas fa-save"></i> Salvar Alterações</button>
+                    </form>
+                </section>
+
+                <!-- Seção Minhas Locações -->
+                <section id="locacoes" class="secao-config">
+                    <h2 class="titulo-secao"><i class="fas fa-list"></i> Minhas Locações</h2>
+                    
+                    <div class="locacoes-container" id="lista-locacoes">
+                        <p>Carregando suas locações...</p>
+                    </div>
+                </section>
+
+                <!-- Seção Segurança -->
+                <section id="seguranca" class="secao-config">
+                    <h2 class="titulo-secao"><i class="fas fa-shield-alt"></i> Segurança</h2>
+                    
+                    <form class="formulario-config" id="form-seguranca">
+                        <div class="grupo-config">
+                            <label for="senha-atual">Senha Atual</label>
+                            <input type="password" id="senha-atual" name="senha-atual" placeholder="Digite sua senha atual" required>
+                        </div>
+
+                        <div class="grupo-config">
+                            <label for="senha-nova">Nova Senha</label>
+                            <input type="password" id="senha-nova" name="senha-nova" placeholder="Digite uma nova senha" required>
+                        </div>
+
+                        <div class="grupo-config">
+                            <label for="senha-confirma">Confirme a Nova Senha</label>
+                            <input type="password" id="senha-confirma" name="senha-confirma" placeholder="Confirme a nova senha" required>
+                        </div>
+
+                        <button type="submit" class="btn-salvar"><i class="fas fa-lock"></i> Atualizar Senha</button>
+                    </form>
+                </section>
+
+                <!-- Seção Pagamentos -->
+                <section id="pagamentos" class="secao-config">
+                    <h2 class="titulo-secao"><i class="fas fa-credit-card"></i> Pagamentos</h2>
+                    
+                    <form class="formulario-config" id="form-pagamento">
+                        <div class="grupo-config">
+                            <label for="metodo-pagamento">Método de Pagamento Preferido</label>
+                            <select id="metodo-pagamento" name="metodo-pagamento">
+                                <option value="pix">PIX</option>
+                                <option value="cartao">Cartão de Crédito</option>
+                            </select>
+                        </div>
+
+                        <div class="grupo-config">
+                            <label for="cartao">Número do Cartão (se aplicável)</label>
+                            <input type="text" id="cartao" name="cartao" placeholder="1234 5678 9012 3456">
+                        </div>
+
+                        <button type="submit" class="btn-salvar"><i class="fas fa-save"></i> Salvar Dados de Pagamento</button>
+                    </form>
+
+                    <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+
+                    <button class="btn-sair" id="btn-logout"><i class="fas fa-sign-out-alt"></i> Sair da Conta</button>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="container-footer">
+            <div class="secao-logo-footer">
+                <img src="../../public/images/logo.png" alt="ALUCAR Logo" class="logo-footer">
+            </div>
+            <div class="coluna-footer">
+                <h3 class="titulo-coluna-footer">Sobre Nós</h3>
+                <ul class="lista-footer">
+                    <li><a href="index.html" class="link-footer">Início</a></li>
+                    <li><a href="configuracoes.html" class="link-footer">Configurações</a></li>
+                    <li><a href="contato.html" class="link-footer">Contato</a></li>
+                </ul>
+            </div>
+            <div class="coluna-footer">
+                <h3 class="titulo-coluna-footer">Redes Sociais</h3>
+                <ul class="lista-footer">
+                    <li><a href="#instagram" class="link-footer">Instagram <i class="fab fa-instagram"></i></a></li>
+                    <li><a href="#facebook" class="link-footer">Facebook <i class="fab fa-facebook"></i></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="copyright">&copy;2025 ALUCAR. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="../../public/js/auth-header.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const API_PERFIL = '/AV2DAW/public/api/client/perfil.php';
+    const API_ATUALIZAR = '/AV2DAW/public/api/client/atualizar-perfil.php';
+    const API_LOCACOES = '/AV2DAW/public/api/client/locacoes.php';
+    const API_SENHA = '/AV2DAW/public/api/client/atualizar-senha.php';
+    const API_PAGAMENTO = '/AV2DAW/public/api/client/atualizar-pagamento.php';
+
+    const spans = {
+        nome: document.getElementById('nome-usuario'),
+        email: document.getElementById('email-usuario'),
+        telefone: document.getElementById('telefone-usuario'),
+        cpf: document.getElementById('cpf-usuario')
+    };
+    const inputs = {
+        nome: document.getElementById('nome'),
+        email: document.getElementById('email'),
+        telefone: document.getElementById('telefone'),
+        cpf: document.getElementById('cpf')
+    };
+    const msgSucesso = document.getElementById('msg-sucesso');
+    const msgErro = document.getElementById('msg-erro');
+    const listaLocacoesEl = document.getElementById('lista-locacoes');
+
+    function showMsg(el, text) {
+        el.textContent = text;
+        el.style.display = 'block';
+        setTimeout(() => el.style.display = 'none', 3500);
+    }
+
+    // --------- Menu / hash handling (fix para alternar seções) ----------
+    // As <a class="menu-item" data-secao="..."> controlam a exibição das seções.
+    // Evita comportamento padrão do link e mostra a seção correta.
+    function initMenuBehavior() {
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                // visual
+                menuItems.forEach(m => m.classList.remove('active'));
+                item.classList.add('active');
+
+                // mostrar seção correta
+                const secao = item.dataset.secao || item.getAttribute('href')?.replace('#','');
+                if (!secao) return;
+                document.querySelectorAll('.secao-config').forEach(s => s.classList.remove('ativa'));
+                const target = document.getElementById(secao);
+                if (target) {
+                    target.classList.add('ativa');
+                    // atualiza hash sem rolar a página
+                    history.replaceState(null, '', '#' + (item.getAttribute('href')?.replace('#','') || secao));
+                }
+            });
+        });
+
+        // Se houver hash na URL ao carregar, abre a seção correspondente
+        const initialHash = location.hash.replace('#','');
+        if (initialHash) {
+            // tenta encontrar menu item cujo href corresponde ao hash
+            const match = Array.from(menuItems).find(m => (m.getAttribute('href')||'').replace('#','') === initialHash || m.dataset.secao === initialHash);
+            if (match) match.click();
+            else {
+                // fallback: se hash for o nome da seção
+                const el = document.getElementById(initialHash);
+                if (el) {
+                    document.querySelectorAll('.secao-config').forEach(s => s.classList.remove('ativa'));
+                    el.classList.add('ativa');
+                }
+            }
+        }
+    }
+    // --------------------------------------------------------------------
+
+    async function carregarPerfil() {
+        try {
+            const res = await fetch(API_PERFIL, { credentials: 'same-origin' });
+            const data = await res.json();
+            if (!data.success) { showMsg(msgErro, data.error || 'Erro ao carregar perfil.'); return; }
+            const p = data.perfil;
+            spans.nome.textContent = p.nome || '';
+            spans.email.textContent = p.email || '';
+            spans.telefone.textContent = p.telefone || '';
+            spans.cpf.textContent = p.cpf || '';
+
+            inputs.nome.value = p.nome || '';
+            inputs.email.value = p.email || '';
+            inputs.telefone.value = p.telefone || '';
+            inputs.cpf.value = p.cpf || '';
+        } catch (err) {
+            showMsg(msgErro, 'Erro de rede ao carregar perfil.');
+            console.error(err);
+        }
+    }
+
+    async function carregarLocacoes() {
+        listaLocacoesEl.innerHTML = '<p>Carregando suas locações...</p>';
+        try {
+            const res = await fetch(API_LOCACOES, { credentials: 'same-origin' });
+            const data = await res.json();
+            if (!data.success) { listaLocacoesEl.innerHTML = '<p>Erro ao carregar locações.</p>'; return; }
+            const locs = data.locacoes || [];
+            if (locs.length === 0) {
+                listaLocacoesEl.innerHTML = '<p>Nenhuma locação encontrada.</p>';
+                return;
+            }
+            listaLocacoesEl.innerHTML = '';
+            locs.forEach(l => {
+                const div = document.createElement('div');
+                div.className = 'locacao-item';
+                const statusClass = (s => {
+                    if (!s) return 'status-reservado';
+                    s = s.toLowerCase();
+                    if (s.includes('reserv')) return 'status-reservado';
+                    if (s.includes('retir') || s.includes('ativo')) return 'status-ativo';
+                    return 'status-finalizado';
+                })(l.status);
+                div.innerHTML = `
+                    <p><strong>#${l.id_locacao}</strong> — ${escapeHtml((l.marca||'') + ' ' + (l.nome_modelo||''))}</p>
+                    <p><i class="fas fa-calendar-alt"></i> Retirada: ${formatDate(l.data_hora_retirada)} &nbsp; <i class="fas fa-calendar-check"></i> Devolução: ${formatDate(l.data_hora_prevista_devolucao)}</p>
+                    <p>Valor: <strong>R$ ${formatNumber(l.valor_total)}</strong></p>
+                    <span class="status-badge ${statusClass}">${l.status || 'Reservado'}</span>
+                    &nbsp; <a href="/AV2DAW/views/client/checkout.php?id_locacao=${encodeURIComponent(l.id_locacao)}">Ver detalhes</a>
+                `;
+                listaLocacoesEl.appendChild(div);
+            });
+        } catch (err) {
+            listaLocacoesEl.innerHTML = '<p>Erro de rede ao carregar locações.</p>';
+            console.error(err);
+        }
+    }
+
+    function formatDate(d) {
+        if (!d) return '-';
+        const dt = new Date(d.replace(' ', 'T'));
+        if (isNaN(dt)) return d;
+        return dt.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+    }
+    function formatNumber(n) {
+        const v = parseFloat(n) || 0;
+        return v.toFixed(2).replace('.', ',');
+    }
+    function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[s]); }
+
+    // atualizar perfil já existente
+    document.getElementById('form-perfil').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+            nome: inputs.nome.value.trim(),
+            email: inputs.email.value.trim(),
+            telefone: inputs.telefone.value.trim(),
+            endereco: '' 
+        };
+        try {
+            const res = await fetch(API_ATUALIZAR, {
+                method: 'POST', credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success) {
+                showMsg(msgSucesso, data.message || 'Atualizado.');
+                spans.nome.textContent = payload.nome;
+                spans.email.textContent = payload.email;
+                spans.telefone.textContent = payload.telefone;
+            } else showMsg(msgErro, data.error || 'Erro ao salvar.');
+        } catch (err) { console.error(err); showMsg(msgErro,'Erro de rede ao salvar perfil.'); }
+    });
+
+    // troca de senha
+    document.getElementById('form-seguranca').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const current = document.getElementById('senha-atual').value.trim();
+        const novo = document.getElementById('senha-nova').value.trim();
+        const confirma = document.getElementById('senha-confirma').value.trim();
+        if (!current || !novo || novo.length < 6) { showMsg(msgErro,'Senha inválida.'); return; }
+        if (novo !== confirma) { showMsg(msgErro,'As senhas não conferem.'); return; }
+
+        try {
+            const res = await fetch(API_SENHA, {
+                method: 'POST', credentials: 'same-origin',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ current_password: current, new_password: novo })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showMsg(msgSucesso, data.message || 'Senha alterada.');
+                document.getElementById('form-seguranca').reset();
+            } else showMsg(msgErro, data.error || 'Erro ao alterar senha.');
+        } catch (err) { console.error(err); showMsg(msgErro,'Erro de rede ao alterar senha.'); }
+    });
+
+    // salvar preferências de pagamento
+    document.getElementById('form-pagamento').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const metodo = document.getElementById('metodo-pagamento').value;
+        const cartao = document.getElementById('cartao').value.trim();
+        try {
+            const res = await fetch(API_PAGAMENTO, {
+                method: 'POST', credentials: 'same-origin',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ metodo: metodo, cartao: cartao })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showMsg(msgSucesso, data.message || 'Preferências salvas.');
+                document.getElementById('form-pagamento').reset();
+            } else showMsg(msgErro, data.error || 'Erro ao salvar preferências.');
+        } catch (err) { console.error(err); showMsg(msgErro,'Erro de rede ao salvar preferência.'); }
+    });
+
+    // Init
+    initMenuBehavior();
+    carregarPerfil();
+    carregarLocacoes();
+});
+</script>
+</body>
+</html>
