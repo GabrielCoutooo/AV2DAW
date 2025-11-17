@@ -18,3 +18,4 @@
 2025-11-16 07:34:45 | Placa recebida: 'NRK-024'
 2025-11-16 08:12:34 | Placa recebida: 'XRL9'
 2025-11-16 08:23:36 | Placa recebida: 'VVVV'
+2025-11-16 22:09:03 | Placa recebida: 'KUV6962'

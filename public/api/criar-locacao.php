@@ -7,7 +7,7 @@ ob_start();
 $input = json_decode(file_get_contents('php://input'), true);
 if (!$input) {
     http_response_code(400);
-    echo json_encode(['success'=>false,'error'=>'Payload inválido']);
+    echo json_encode(['success' => false, 'error' => 'Payload inválido']);
     exit;
 }
 
@@ -21,7 +21,7 @@ $id_cliente = isset($_SESSION['cliente_id']) ? intval($_SESSION['cliente_id']) :
 
 if ($id_veiculo <= 0 || $dias <= 0) {
     http_response_code(400);
-    echo json_encode(['success'=>false,'error'=>'Dados obrigatórios ausentes']);
+    echo json_encode(['success' => false, 'error' => 'Dados obrigatórios ausentes']);
     exit;
 }
 
@@ -33,7 +33,7 @@ $authPath = $projectRoot ? $projectRoot . '/config/auth-check.php' : null;
 
 if (!$configPath || !file_exists($configPath) || !$connectionPath || !file_exists($connectionPath)) {
     http_response_code(500);
-    echo json_encode(['success'=>false,'error'=>'Arquivos de configuração ausentes']);
+    echo json_encode(['success' => false, 'error' => 'Arquivos de configuração ausentes']);
     exit;
 }
 
@@ -50,13 +50,13 @@ $dt_prev_devol = date('Y-m-d H:i:s', strtotime("+{$dias} days"));
 $id_filial_retirada = 1;
 $status = 'Reservado';
 
-// Insere locação
-$sql = "INSERT INTO LOCACAO (id_cliente,id_veiculo,id_filial_retirada,id_filial_devolucao,data_hora_retirada,data_hora_prevista_devolucao,status,valor_total)
+// Insere locação (trigger vai atualizar status_veiculo automaticamente)
+$sql = "INSERT INTO locacao (id_cliente,id_veiculo,id_filial_retirada,id_filial_devolucao,data_hora_retirada,data_hora_prevista_devolucao,status,valor_total)
         VALUES (?, ?, ?, NULL, ?, ?, ?, ?)";
 $stmt = $con->prepare($sql);
 if (!$stmt) {
     http_response_code(500);
-    echo json_encode(['success'=>false,'error'=>'Erro ao preparar consulta: '.$con->error]);
+    echo json_encode(['success' => false, 'error' => 'Erro ao preparar consulta: ' . $con->error]);
     exit;
 }
 
@@ -64,14 +64,14 @@ if (!$stmt) {
 $bind = $stmt->bind_param("iiisssd", $id_cliente, $id_veiculo, $id_filial_retirada, $dt_retirada, $dt_prev_devol, $status, $valor_total);
 if ($bind === false) {
     http_response_code(500);
-    echo json_encode(['success'=>false,'error'=>'Erro ao bindar parâmetros: '.$stmt->error]);
+    echo json_encode(['success' => false, 'error' => 'Erro ao bindar parâmetros: ' . $stmt->error]);
     exit;
 }
 
 $exec = $stmt->execute();
 if (!$exec) {
     http_response_code(500);
-    echo json_encode(['success'=>false,'error'=>'Erro ao inserir locação: '.$stmt->error]);
+    echo json_encode(['success' => false, 'error' => 'Erro ao inserir locação: ' . $stmt->error]);
     exit;
 }
 
@@ -81,4 +81,4 @@ $con->close();
 
 // limpa qualquer saída extra antes de enviar JSON
 ob_end_clean();
-echo json_encode(['success'=>true,'id_locacao'=>$id_locacao]);
+echo json_encode(['success' => true, 'id_locacao' => $id_locacao]);

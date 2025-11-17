@@ -5,13 +5,13 @@ error_reporting(E_ALL);
 ob_start();
 
 // garante que qualquer fatal/parse/notice será retornado como JSON
-register_shutdown_function(function(){
+register_shutdown_function(function () {
     $err = error_get_last();
     if ($err !== null) {
         @ob_end_clean();
         http_response_code(500);
         header('Content-Type: application/json; charset=UTF-8');
-        echo json_encode(['success' => false, 'error' => 'Fatal error: '.$err['message']]);
+        echo json_encode(['success' => false, 'error' => 'Fatal error: ' . $err['message']]);
     }
 });
 
@@ -21,7 +21,7 @@ if (!file_exists($configPath)) {
     @ob_end_clean();
     http_response_code(500);
     header('Content-Type: application/json; charset=UTF-8');
-    echo json_encode(['success'=>false,'error'=>'Configuração (config.php) não encontrada.']);
+    echo json_encode(['success' => false, 'error' => 'Configuração (config.php) não encontrada.']);
     exit;
 }
 require_once $configPath;
@@ -32,7 +32,7 @@ if (!file_exists($connectionPath)) {
     @ob_end_clean();
     http_response_code(500);
     header('Content-Type: application/json; charset=UTF-8');
-    echo json_encode(['success'=>false,'error'=>'Conexão não encontrada']);
+    echo json_encode(['success' => false, 'error' => 'Conexão não encontrada']);
     exit;
 }
 require_once $connectionPath;
@@ -46,7 +46,7 @@ header('Content-Type: application/json; charset=UTF-8');
 // valida $con
 if (!isset($con) || !($con instanceof mysqli)) {
     http_response_code(500);
-    echo json_encode(['success'=>false,'error'=>'Conexão com BD não disponível (variável $con).']);
+    echo json_encode(['success' => false, 'error' => 'Conexão com BD não disponível (variável $con).']);
     exit;
 }
 
@@ -54,7 +54,7 @@ if (!isset($con) || !($con instanceof mysqli)) {
 $input = json_decode(file_get_contents('php://input'), true);
 if (!$input) {
     http_response_code(400);
-    echo json_encode(['success'=>false,'error'=>'Payload inválido ou JSON mal formado.']);
+    echo json_encode(['success' => false, 'error' => 'Payload inválido ou JSON mal formado.']);
     exit;
 }
 
@@ -67,13 +67,13 @@ $id_cliente = isset($_SESSION['usuario_id']) ? intval($_SESSION['usuario_id']) :
 if ($id_cliente === null) {
     // se seu fluxo ainda usa um id fixo para testes, remova/ajuste aqui
     http_response_code(401);
-    echo json_encode(['success'=>false,'error'=>'Usuário não autenticado.']);
+    echo json_encode(['success' => false, 'error' => 'Usuário não autenticado.']);
     exit;
 }
 
 if ($id_veiculo <= 0 || $dias <= 0) {
     http_response_code(400);
-    echo json_encode(['success'=>false,'error'=>'Dados obrigatórios ausentes.']);
+    echo json_encode(['success' => false, 'error' => 'Dados obrigatórios ausentes.']);
     exit;
 }
 
@@ -107,31 +107,31 @@ if ($checkStmt) {
 } else {
     // se a consulta de verificação falhar, aborta com mensagem
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Erro ao verificar filiais: '.$con->error]);
+    echo json_encode(['success' => false, 'error' => 'Erro ao verificar filiais: ' . $con->error]);
     exit;
 }
 
-// insere locação com tratamento de erros (mantém placeholders)
-$sql = "INSERT INTO LOCACAO (id_cliente,id_veiculo,id_filial_retirada,id_filial_devolucao,data_hora_retirada,data_hora_prevista_devolucao,status,valor_total)
+// insere locação com tratamento de erros (trigger vai atualizar status_veiculo automaticamente)
+$sql = "INSERT INTO locacao (id_cliente,id_veiculo,id_filial_retirada,id_filial_devolucao,data_hora_retirada,data_hora_prevista_devolucao,status,valor_total)
         VALUES (?, ?, ?, NULL, ?, ?, ?, ?)";
 $stmt = $con->prepare($sql);
 if (!$stmt) {
     http_response_code(500);
-    echo json_encode(['success'=>false,'error'=>'Erro ao preparar consulta: '.$con->error]);
+    echo json_encode(['success' => false, 'error' => 'Erro ao preparar consulta: ' . $con->error]);
     exit;
 }
 
 $bindOk = $stmt->bind_param("iiisssd", $id_cliente, $id_veiculo, $id_filial_retirada, $dt_retirada, $dt_prev_devol, $status, $valor_total);
 if (!$bindOk) {
     http_response_code(500);
-    echo json_encode(['success'=>false,'error'=>'Erro ao bindar parâmetros: '.$stmt->error]);
+    echo json_encode(['success' => false, 'error' => 'Erro ao bindar parâmetros: ' . $stmt->error]);
     exit;
 }
 
 $exec = $stmt->execute();
 if (!$exec) {
     http_response_code(500);
-    echo json_encode(['success'=>false,'error'=>'Erro ao inserir locação: '.$stmt->error]);
+    echo json_encode(['success' => false, 'error' => 'Erro ao inserir locação: ' . $stmt->error]);
     exit;
 }
 
@@ -140,7 +140,7 @@ $stmt->close();
 $con->close();
 
 // resposta de sucesso
-echo json_encode(['success'=>true,'id_locacao'=>$id_locacao]);
+echo json_encode(['success' => true, 'id_locacao' => $id_locacao]);
 exit;
 
 /*
@@ -154,4 +154,4 @@ copie esse codigo caso no dia da apresentação falhar:
 INSERT INTO FILIAL (id_filial, nome_filial, endereco, telefone, email) 
 VALUES (1, 'Matriz Rio de Janeiro', 'Rua Exemplo, 123 - Centro', '(21) 9999-0000', 'contato@alucar.com');
 
-*/?>
+*/

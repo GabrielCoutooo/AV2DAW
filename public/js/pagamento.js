@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.msgStatus.textContent = `Você selecionou ${metodo}.`;
         el.msgStatus.style.color = "#00bfff";
       }
-      const valorTotal = parseFloat(reservaData.valor_total) || 0;
+      const valorTotal = parseFloat(reservaData.total) || 0;
       if (el.btnFinalizarCompra) {
         el.btnFinalizarCompra.textContent = `Pagar ${formatarMoeda(
           valorTotal

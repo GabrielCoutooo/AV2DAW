@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vender - Atendimento na Loja</title>
+    <link rel="stylesheet" href="../../public/css/style.css" />
+    <style>
+        body {
+            background: #f5f7fb;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background: #2c3e50;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 50px;
+        }
+
+        .menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .menu a {
+            color: #fff;
+            text-decoration: none;
+            padding: .5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .menu a:hover {
+            background: #34495e;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
+        }
+
+        h1 {
+            margin-bottom: .75rem;
+            color: #2c3e50;
+        }
+
+        p.lead {
+            color: #556;
+            margin-bottom: 1.25rem;
+        }
+
+        .card {
+            border: 1px solid #e8ebf2;
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .row {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .field {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .field label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: .4rem;
+            color: #334;
+        }
+
+        .field input {
+            width: 100%;
+            padding: .6rem .8rem;
+            border: 1px solid #ccd3e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .actions {
+            display: flex;
+            gap: .75rem;
+        }
+
+        .btn {
+            border: 0;
+            padding: .65rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: #fff;
+        }
+
+        .btn-outline {
+            background: #fff;
+            color: #2c3e50;
+            border: 1px solid #ccd3e0;
+        }
+
+        .hint {
+            color: #667;
+            font-size: .9rem;
+            margin-top: .5rem;
+        }
+
+        /* Modal simples */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+        }
+
+        .modal {
+            background: #fff;
+            width: 30vw;
+            max-width: 98vw;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
+            overflow: visible;
+            margin: 0 auto;
+            position: relative;
+            top: 40px;
+            max-height: 55vh;
+        }
+
+        .modal header {
+            background: #2c3e50;
+            color: #fff;
+            padding: .75rem 1rem .75rem 1rem;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+
+        .modal .content {
+            padding: 1rem 1rem 3.5rem 1rem;
+            min-width: 350px;
+            min-height: 0;
+            max-height: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal .close {
+            background: #f4f4f4;
+            color: #2c3e50;
+            border: 1px solid #ccd3e0;
+            padding: .45rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            position: absolute;
+            right: 24px;
+            bottom: 18px;
+            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
+            transition: background .2s;
+        }
+
+        .modal .close:hover {
+            background: #e1e7ef;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: .6rem .5rem;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        .table th {
+            background: #f7f9fc;
+        }
+
+        .table tr:hover {
+            background: #f3f6fb;
+        }
+
+        .search-row {
+            display: flex;
+            gap: .5rem;
+            margin-bottom: .75rem;
+        }
+
+        .search-row input {
+            flex: 1;
+            padding: .5rem .6rem;
+            border: 1px solid #ccd3e0;
+            border-radius: 8px;
+        }
+
+        .badge {
+            padding: .25rem .45rem;
+            border-radius: 6px;
+            font-size: .8rem;
+            color: #fff;
+        }
+
+        .badge.disponivel {
+            background: #27ae60;
+        }
+
+        .badge.alugado {
+            background: #e67e22;
+        }
+
+        .badge.manutencao {
+            background: #c0392b;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <figure class="logo"><img src="../../public/images/logo.png" alt="ALUCAR Logo" class="logo-img" /></figure>
+        <nav class="menu">
+            <a href="index.php">Dashboard</a>
+            <a href="vendas.html" style="background:#34495e;">Vender</a>
+            <a href="../../public/logout.php" style="background:#e74c3c;">Sair</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Vender veículo</h1>
+        <p class="lead">Atenda o cliente na loja: selecione o veículo e continue como no fluxo de aluguel (detalhes +
+            pagamento).</p>
+
+        <div class="card">
+            <div class="row">
+                <div class="field">
+                    <label for="idVeiculo">ID do veículo</label>
+                    <input id="idVeiculo" type="number" placeholder="Ex.: 12" />
+                    <div class="hint">Dica: você também pode acessar esta página com <code>?id=12</code> para ir
+                        direto.</div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-primary" id="btnContinuar">Continuar</button>
+                    <button class="btn btn-outline" id="btnTabela">Tabela de IDs</button>
+                    <button class="btn btn-secondary" id="btnVoltar">Voltar ao Dashboard</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Tabela de IDs -->
+    <div class="modal-backdrop" id="mdBackdrop">
+        <div class="modal">
+            <div class="content">
+                <div class="search-row" style="width:100%; max-width: 99%;">
+                    <input id="busca" type="text" placeholder="Filtrar por modelo, marca, placa ou cor..."
+                        style="width:100%;" />
+                </div>
+                <div style="max-height: 260px; overflow:auto; border:1px solid #e8ebf2; border-radius:8px; width:100%;">
+                    <table class="table" id="tblVeiculos" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th style="width:70px;">ID</th>
+                                <th>Modelo</th>
+                                <th>Marca</th>
+                                <th>Placa</th>
+                                <th>Cor</th>
+                                <th style="width:120px;">Status</th>
+                                <th style="width:110px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" style="text-align:center; color:#667;">Carregando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <button class="close" id="mdClose">Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const qs = new URLSearchParams(location.search);
+            const idFromUrl = qs.get('id') || qs.get('id_veiculo');
+            function go(id) { if (!id) return; window.location.href = '/AV2DAW/views/adm/checkout.php?id=' + encodeURIComponent(id); }
+            if (idFromUrl) { go(idFromUrl); return; }
+            const idInput = document.getElementById('idVeiculo');
+            const btn = document.getElementById('btnContinuar');
+            const back = document.getElementById('btnVoltar');
+            const btnTabela = document.getElementById('btnTabela');
+            const mdBackdrop = document.getElementById('mdBackdrop');
+            const mdClose = document.getElementById('mdClose');
+            const tbl = document.getElementById('tblVeiculos');
+            const busca = document.getElementById('busca');
+            let rowsData = [];
+            let loaded = false;
+
+            btn.addEventListener('click', () => go(idInput.value.trim()));
+            back.addEventListener('click', () => window.location.href = 'index.php');
+
+            function statusBadge(s) {
+                const map = {
+                    'Disponível': 'disponivel', 'Alugado': 'alugado', 'Manutenção': 'manutencao'
+                };
+                const cls = map[s] || 'disponivel';
+                return `<span class="badge ${cls}">${s || 'Disponível'}</span>`;
+            }
+
+            function renderTable(filterText = '') {
+                const body = tbl.querySelector('tbody');
+                const f = (filterText || '').toLowerCase();
+                const filtered = rowsData.filter(r => {
+                    const h = `${r.modelo} ${r.marca} ${r.placa} ${r.cor}`.toLowerCase();
+                    return h.includes(f);
+                });
+                if (filtered.length === 0) {
+                    body.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#667;">Nenhum veículo encontrado.</td></tr>`;
+                    return;
+                }
+                body.innerHTML = filtered.map(r => `
+                                <tr>
+                                    <td>${r.id_veiculo}</td>
+                                    <td>${r.modelo}</td>
+                                    <td>${r.marca}</td>
+                                    <td>${r.placa}</td>
+                                    <td>${r.cor}</td>
+                                    <td>${statusBadge(r.status_veiculo || (r.disponivel ? 'Disponível' : 'Alugado'))}</td>
+                                    <td><button class="btn btn-primary" data-select="${r.id_veiculo}">Selecionar</button></td>
+                                </tr>
+                            `).join('');
+            }
+
+            async function loadIfNeeded() {
+                if (loaded) return;
+                try {
+                    const res = await fetch('/AV2DAW/public/api/adm/dashboard_data.php');
+                    const json = await res.json();
+                    rowsData = Array.isArray(json.veiculos) ? json.veiculos : [];
+                    loaded = true;
+                    renderTable();
+                } catch (e) {
+                    const body = tbl.querySelector('tbody');
+                    body.innerHTML = `<tr><td colspan="7" style="color:#c0392b; text-align:center;">Erro ao carregar veículos.</td></tr>`;
+                }
+            }
+
+            btnTabela.addEventListener('click', async () => {
+                mdBackdrop.style.display = 'flex';
+                await loadIfNeeded();
+                busca.focus();
+            });
+
+            mdClose.addEventListener('click', () => { mdBackdrop.style.display = 'none'; });
+            mdBackdrop.addEventListener('click', (e) => { if (e.target === mdBackdrop) mdBackdrop.style.display = 'none'; });
+
+            busca.addEventListener('input', () => renderTable(busca.value));
+            tbl.addEventListener('click', (e) => {
+                const btn = e.target.closest('button[data-select]');
+                if (!btn) return;
+                const id = btn.getAttribute('data-select');
+                document.getElementById('idVeiculo').value = id;
+                mdBackdrop.style.display = 'none';
+                // opcional: já redirecionar
+                // go(id);
+            });
+        })();
+    </script>
+</body>
+
+</html>

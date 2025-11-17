@@ -111,11 +111,15 @@ function renderizarCarros(carros, containerId) {
       }
     );
 
+    // Exibe todas as categorias do veículo
+    const categorias = carro.categorias || carro.categoria || "";
+    const categoriasDisplay = categorias ? categorias : "Sem categoria";
+
     card.innerHTML = `
             <div class="card-header">
                 <h3>${carro.nome_modelo}</h3>
                 <button class="btn-like">♡</button> </div>
-            <p class="carro-categoria">${carro.categoria}</p>
+            <p class="carro-categoria">${categoriasDisplay}</p>
             
             <div class="card-imagem">
                 <img src="/AV2DAW/public/images/uploads/carros/${
@@ -191,7 +195,9 @@ function renderizarCarros(carros, containerId) {
         const id = carro.id_veiculo || carro.id || "";
         if (id) {
           // redireciona para checkout.html
-          window.location.href = `/AV2DAW/views/client/checkout.html?id=${encodeURIComponent(id)}`;
+          window.location.href = `/AV2DAW/views/client/checkout.html?id=${encodeURIComponent(
+            id
+          )}`;
         }
       });
     }
@@ -244,7 +250,8 @@ async function inicializarFiltroDisponibilidade() {
     const data = inputData.value;
     const hora = inputHora.value;
     const modeloId = selModelos.value;
-    const q = inputPesquisa.value.trim();
+    // Campo de pesquisa pode não existir em algumas páginas
+    const q = inputPesquisa ? inputPesquisa.value.trim() : "";
     const params = new URLSearchParams();
     params.set("tipo", tipo);
     if (data) params.set("data", data);

@@ -55,6 +55,31 @@ INSERT INTO `admin` (`id_admin`, `nome`, `email`, `senha_hash`, `rg`, `data_nasc
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `categoria`
+--
+
+CREATE TABLE `categoria` (
+  `id_categoria` int(11) NOT NULL,
+  `nome` varchar(50) NOT NULL,
+  `descricao` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `categoria`
+--
+
+INSERT INTO `categoria` (`id_categoria`, `nome`, `descricao`) VALUES
+(1, 'Popular', 'Veículos mais procurados'),
+(2, 'Recomendado', 'Veículos recomendados pela equipe'),
+(3, 'SUV', 'Veículos utilitários esportivos'),
+(4, 'Esportivo', 'Veículos esportivos de alta performance'),
+(5, 'Executivo', 'Veículos para executivos'),
+(6, 'Econômico', 'Veículos com baixo consumo'),
+(7, 'Luxo', 'Veículos de luxo premium');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `cliente`
 --
 
@@ -171,6 +196,25 @@ INSERT INTO `modelo` (`id_modelo`, `nome_modelo`, `marca`, `categoria`, `preco_d
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `modelo_categoria`
+--
+
+CREATE TABLE `modelo_categoria` (
+  `id_modelo` int(11) NOT NULL,
+  `id_categoria` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `modelo_categoria`
+--
+
+INSERT INTO `modelo_categoria` (`id_modelo`, `id_categoria`) VALUES
+(1, 4),
+(2, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `motorista_adicional`
 --
 
@@ -280,6 +324,7 @@ CREATE TABLE `veiculo` (
   `capacidade_pessoas` int(11) DEFAULT NULL,
   `quilometragem_atual` int(11) DEFAULT 0,
   `disponivel` tinyint(1) DEFAULT 1,
+  `status_veiculo` enum('Disponível','Alugado','Manutenção','Indisponível') DEFAULT 'Disponível',
   `acessivel` tinyint(1) DEFAULT 0,
   `gps_rastreamento` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -288,9 +333,9 @@ CREATE TABLE `veiculo` (
 -- Despejando dados para a tabela `veiculo`
 --
 
-INSERT INTO `veiculo` (`id_veiculo`, `id_modelo`, `placa`, `ano`, `cor`, `tipo_transmissao`, `capacidade_pessoas`, `quilometragem_atual`, `disponivel`, `acessivel`, `gps_rastreamento`) VALUES
-(1, 1, 'XRL9', 2012, 'preta', 'Manual', 5, 1, 1, 0, NULL),
-(2, 2, 'VVVV', 2021, 'azul', 'Manual', 5, 123, 1, 0, NULL);
+INSERT INTO `veiculo` (`id_veiculo`, `id_modelo`, `placa`, `ano`, `cor`, `tipo_transmissao`, `capacidade_pessoas`, `quilometragem_atual`, `disponivel`, `status_veiculo`, `acessivel`, `gps_rastreamento`) VALUES
+(1, 1, 'XRL9', 2012, 'preta', 'Manual', 5, 1, 1, 'Disponível', 0, NULL),
+(2, 2, 'VVVV', 2021, 'azul', 'Manual', 5, 123, 1, 'Disponível', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -319,6 +364,28 @@ CREATE TABLE `vistoria` (
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`id_admin`),
   ADD UNIQUE KEY `email` (`email`);
+  ALTER TABLE admin ADD COLUMN cpf VARCHAR(14) NOT NULL DEFAULT '';
+  ALTER TABLE admin ADD COLUMN rg VARCHAR(20) DEFAULT NULL;
+  ALTER TABLE admin ADD COLUMN data_nascimento DATE DEFAULT NULL;
+  ALTER TABLE admin ADD COLUMN genero VARCHAR(10) DEFAULT NULL;
+  ALTER TABLE admin ADD COLUMN telefone VARCHAR(20) DEFAULT NULL;
+  ALTER TABLE admin ADD COLUMN endereco VARCHAR(255) DEFAULT NULL;
+  ALTER TABLE admin ADD COLUMN data_admissao DATE DEFAULT NULL;
+  ALTER TABLE admin ADD COLUMN turno VARCHAR(50) DEFAULT NULL;
+  ALTER TABLE admin ADD COLUMN carteira_trabalho VARCHAR(50) DEFAULT NULL;
+  ALTER TABLE admin ADD COLUMN banco VARCHAR(100) DEFAULT NULL;
+  ALTER TABLE admin ADD COLUMN agencia_conta VARCHAR(50) DEFAULT NULL;
+
+
+
+
+
+--
+-- Índices de tabela `categoria`
+--
+ALTER TABLE `categoria`
+  ADD PRIMARY KEY (`id_categoria`),
+  ADD UNIQUE KEY `nome` (`nome`);
 
 --
 -- Índices de tabela `cliente`
@@ -357,6 +424,13 @@ ALTER TABLE `locacao`
 --
 ALTER TABLE `modelo`
   ADD PRIMARY KEY (`id_modelo`);
+
+--
+-- Índices de tabela `modelo_categoria`
+--
+ALTER TABLE `modelo_categoria`
+  ADD PRIMARY KEY (`id_modelo`,`id_categoria`),
+  ADD KEY `fk_categoria` (`id_categoria`);
 
 --
 -- Índices de tabela `motorista_adicional`
@@ -424,6 +498,12 @@ ALTER TABLE `vistoria`
 --
 ALTER TABLE `admin`
   MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de tabela `categoria`
+--
+ALTER TABLE `categoria`
+  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `cliente`
@@ -517,6 +597,13 @@ ALTER TABLE `locacao`
   ADD CONSTRAINT `LOCACAO_ibfk_4` FOREIGN KEY (`id_filial_devolucao`) REFERENCES `filial` (`id_filial`);
 
 --
+-- Restrições para tabelas `modelo_categoria`
+--
+ALTER TABLE `modelo_categoria`
+  ADD CONSTRAINT `fk_modelo_categoria_modelo` FOREIGN KEY (`id_modelo`) REFERENCES `modelo` (`id_modelo`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_modelo_categoria_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`) ON DELETE CASCADE;
+
+--
 -- Restrições para tabelas `motorista_adicional`
 --
 ALTER TABLE `motorista_adicional`
@@ -558,6 +645,169 @@ ALTER TABLE `veiculo`
 --
 ALTER TABLE `vistoria`
   ADD CONSTRAINT `VISTORIA_ibfk_1` FOREIGN KEY (`id_locacao`) REFERENCES `locacao` (`id_locacao`);
+
+-- --------------------------------------------------------
+-- APLICAR CATEGORIAS AOS MODELOS POR NOME (PORTÁVEL)
+-- Este bloco garante categorias e vincula modelos às categorias desejadas
+-- sem depender de IDs fixos. Seguro para executar múltiplas vezes.
+
+-- Garantir que as categorias necessárias existam
+INSERT INTO categoria (nome, descricao) VALUES ('Popular','Veículos mais procurados') ON DUPLICATE KEY UPDATE nome = nome;
+INSERT INTO categoria (nome, descricao) VALUES ('Recomendado','Veículos recomendados pela equipe') ON DUPLICATE KEY UPDATE nome = nome;
+INSERT INTO categoria (nome, descricao) VALUES ('SUV','Veículos utilitários esportivos') ON DUPLICATE KEY UPDATE nome = nome;
+INSERT INTO categoria (nome, descricao) VALUES ('Esportivo','Veículos esportivos') ON DUPLICATE KEY UPDATE nome = nome;
+INSERT INTO categoria (nome, descricao) VALUES ('Sedan','Carro sedan (3 volumes)') ON DUPLICATE KEY UPDATE nome = nome;
+INSERT INTO categoria (nome, descricao) VALUES ('Hatch Médio','Hatchback médio') ON DUPLICATE KEY UPDATE nome = nome;
+INSERT INTO categoria (nome, descricao) VALUES ('Hatch Compacto','Hatchback compacto') ON DUPLICATE KEY UPDATE nome = nome;
+INSERT INTO categoria (nome, descricao) VALUES ('Compacto','Veículo compacto') ON DUPLICATE KEY UPDATE nome = nome;
+INSERT INTO categoria (nome, descricao) VALUES ('Picape Compacta','Picape de porte compacto') ON DUPLICATE KEY UPDATE nome = nome;
+
+-- CRETA: SUV e Recomendado
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='SUV'
+WHERE m.nome_modelo LIKE '%Creta%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Recomendado'
+WHERE m.nome_modelo LIKE '%Creta%';
+
+-- GOL SEDAN e POPULAR
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Sedan'
+WHERE m.nome_modelo LIKE '%Gol%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Popular'
+WHERE m.nome_modelo LIKE '%Gol%';
+
+-- KICKS: SUV e Recomendado
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='SUV'
+WHERE m.nome_modelo LIKE '%Kicks%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Recomendado'
+WHERE m.nome_modelo LIKE '%Kicks%';
+
+-- ARGO SEDAN e POPULAR
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Sedan'
+WHERE m.nome_modelo LIKE '%Argo%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Popular'
+WHERE m.nome_modelo LIKE '%Argo%';
+
+-- CIVIC TYPE R: Esportivo e Recomendado
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Esportivo'
+WHERE m.nome_modelo LIKE '%Civic%Type%R%' OR m.nome_modelo LIKE '%Type R%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Recomendado'
+WHERE m.nome_modelo LIKE '%Civic%Type%R%' OR m.nome_modelo LIKE '%Type R%';
+
+-- COROLLA: Sedan e Recomendado
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Sedan'
+WHERE m.nome_modelo LIKE '%Corolla%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Recomendado'
+WHERE m.nome_modelo LIKE '%Corolla%';
+
+-- FUSCA: Sedan e Popular
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Sedan'
+WHERE m.nome_modelo LIKE '%Fusca%' AND m.nome_modelo NOT LIKE '%Novo%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Popular'
+WHERE m.nome_modelo LIKE '%Fusca%' AND m.nome_modelo NOT LIKE '%Novo%';
+
+-- HB20 Sedan e Popular
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Sedan'
+WHERE m.nome_modelo LIKE '%HB%20%' OR m.nome_modelo LIKE '%HB20%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Popular'
+WHERE m.nome_modelo LIKE '%HB%20%' OR m.nome_modelo LIKE '%HB20%';
+
+-- NOVO FUSCA: Hatch Médio e Recomendado
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Hatch Médio'
+WHERE m.nome_modelo LIKE '%Novo%Fusca%' OR m.nome_modelo LIKE '%New Beetle%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Recomendado'
+WHERE m.nome_modelo LIKE '%Novo%Fusca%' OR m.nome_modelo LIKE '%New Beetle%';
+
+-- ONIX: Compacto, Recomendado e Popular
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Compacto'
+WHERE m.nome_modelo LIKE '%Onix%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Recomendado'
+WHERE m.nome_modelo LIKE '%Onix%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Popular'
+WHERE m.nome_modelo LIKE '%Onix%';
+
+-- POLO: Hatch Compacto, Popular e Recomendado
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Hatch Compacto'
+WHERE m.nome_modelo LIKE '%Polo%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Popular'
+WHERE m.nome_modelo LIKE '%Polo%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Recomendado'
+WHERE m.nome_modelo LIKE '%Polo%';
+
+-- SAVEIRO: Picape Compacta e Recomendado
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Picape Compacta'
+WHERE m.nome_modelo LIKE '%Saveiro%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Recomendado'
+WHERE m.nome_modelo LIKE '%Saveiro%';
+
+-- STRADA: Picape Compacta e Recomendado
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Picape Compacta'
+WHERE m.nome_modelo LIKE '%Strada%';
+INSERT IGNORE INTO modelo_categoria (id_modelo, id_categoria)
+SELECT m.id_modelo, c.id_categoria FROM modelo m JOIN categoria c ON c.nome='Recomendado'
+WHERE m.nome_modelo LIKE '%Strada%';
+
+-- --------------------------------------------------------
+-- TRIGGERS PARA SINCRONIZAÇÃO AUTOMÁTICA DE STATUS
+-- Sincroniza status_veiculo com status da locação
+-- --------------------------------------------------------
+
+DELIMITER $$
+
+-- Trigger: Quando locação é INSERIDA
+CREATE TRIGGER after_locacao_insert
+AFTER INSERT ON locacao
+FOR EACH ROW
+BEGIN
+    IF NEW.status = 'Retirado' THEN
+        UPDATE veiculo SET status_veiculo = 'Alugado' WHERE id_veiculo = NEW.id_veiculo;
+    ELSEIF NEW.status = 'Reservado' THEN
+        UPDATE veiculo SET status_veiculo = 'Disponível' WHERE id_veiculo = NEW.id_veiculo;
+    END IF;
+END$$
+
+-- Trigger: Quando locação é ATUALIZADA
+CREATE TRIGGER after_locacao_update
+AFTER UPDATE ON locacao
+FOR EACH ROW
+BEGIN
+    IF NEW.status = 'Retirado' THEN
+        UPDATE veiculo SET status_veiculo = 'Alugado' WHERE id_veiculo = NEW.id_veiculo;
+    ELSEIF NEW.status = 'Devolvido' OR NEW.status = 'Cancelado' THEN
+        -- Verificar se não há outras locações ativas para este veículo
+        IF (SELECT COUNT(*) FROM locacao WHERE id_veiculo = NEW.id_veiculo AND status = 'Retirado' AND id_locacao != NEW.id_locacao) = 0 THEN
+            UPDATE veiculo SET status_veiculo = 'Disponível' WHERE id_veiculo = NEW.id_veiculo;
+        END IF;
+    END IF;
+END$$
+
+DELIMITER ;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

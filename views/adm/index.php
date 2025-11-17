@@ -108,10 +108,12 @@ require_once APP_PATH . "/config/auth-check.php";
             <label>Preço da diária (R$)</label>
             <input type="number" name="preco_diaria_base" step="0.01" required>
 
-            <label>Status</label>
-            <select name="disponivel" id="disponivelInput" required>
-                <option value="1">Disponível</option>
-                <option value="0">indisponível</option>
+            <label>Status do Veículo</label>
+            <select name="status_veiculo" required>
+                <option value="Disponível">Disponível</option>
+                <option value="Alugado">Alugado</option>
+                <option value="Manutenção">Manutenção</option>
+                <option value="Indisponível">Indisponível</option>
             </select>
 
             <label>Imagem do veículo</label>
@@ -168,10 +170,12 @@ require_once APP_PATH . "/config/auth-check.php";
             <label>Preço da diária (R$)</label>
             <input type="number" name="preco_diaria_base" step="0.01" required>
 
-            <label>Status</label>
-            <select name="disponivel" id="disponivelInputEdicao" required>
-                <option value="1">Disponível</option>
-                <option value="0">Indisponível</option>
+            <label>Status do Veículo</label>
+            <select name="status_veiculo" id="statusVeiculoInputEdicao" required>
+                <option value="Disponível">Disponível</option>
+                <option value="Alugado">Alugado</option>
+                <option value="Manutenção">Manutenção</option>
+                <option value="Indisponível">Indisponível</option>
             </select>
 
             <label>Imagem do veículo</label>
@@ -193,60 +197,117 @@ require_once APP_PATH . "/config/auth-check.php";
         <form id="formCadastroVendedor">
             <div class="form-group-inline">
                 <label>Nome completo</label>
-                <input type="text" name="nome" required>
+                <input type="text" name="nome" id="nome" required>
                 <label>CPF</label>
-                <input type="text" name="cpf" required>
+                <input type="text" name="cpf" id="cpf" required>
             </div>
-            
+
             <div class="form-group-inline">
                 <label>RG</label>
-                <input type="text" name="rg">
+                <input type="text" name="rg" id="rg">
                 <label>Data de nascimento</label>
-                <input type="date" name="data_nascimento">
+                <input type="date" name="data_nascimento" id="data_nascimento">
                 <label>Gênero</label>
-                <select name="genero">
+                <select name="genero" id="genero">
                     <option value="">Selecione</option>
                     <option value="M">Masculino</option>
                     <option value="F">Feminino</option>
                     <option value="Outro">Outro</option>
                 </select>
             </div>
-            
+
             <div class="form-group-inline">
                 <label>Telefone</label>
-                <input type="tel" name="telefone">
+                <input type="tel" name="telefone" id="telefone">
                 <label>E-mail (Login)</label>
-                <input type="email" name="email" required>
+                <input type="email" name="email" id="email" required>
                 <label>Endereço completo</label>
-                <input type="text" name="endereco">
+                <input type="text" name="endereco" id="endereco">
             </div>
 
             <div class="form-group-inline">
                 <label>Data de admissão</label>
-                <input type="date" name="data_admissao">
+                <input type="date" name="data_admissao" id="data_admissao">
                 <label>Turno</label>
-                <input type="text" name="turno">
+                <input type="text" name="turno" id="turno">
                 <label>Carteira de trabalho</label>
-                <input type="text" name="carteira_trabalho">
+                <input type="text" name="carteira_trabalho" id="carteira_trabalho">
             </div>
 
             <div class="form-group-inline">
                 <label>Banco</label>
-                <input type="text" name="banco">
+                <input type="text" name="banco" id="banco">
                 <label>Agência e conta</label>
-                <input type="text" name="agencia_conta">
+                <input type="text" name="agencia_conta" id="agencia_conta">
             </div>
 
             <div class="form-group-inline">
                 <label>Senha de Acesso</label>
-                <input type="password" name="senha" placeholder="Senha inicial do Admin" required>
+                <input type="password" name="senha" id="senha" placeholder="Senha inicial do Admin" required>
                 <label>Confirmar Senha</label>
-                <input type="password" name="confirmar_senha" placeholder="Confirme a senha" required>
+                <input type="password" name="confirmar_senha" id="confirmar_senha" placeholder="Confirme a senha" required>
             </div>
-            
+
             <p id="msg-cadastro-vendedor" style="color:red; margin-top:10px;"></p>
 
             <button type="submit" class="btn btn-salvar" style="margin-top: 15px;">FINALIZAR CADASTRO</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL VER/EDITAR VENDEDOR -->
+<div id="modalVerVendedor" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 700px;">
+        <span class="fechar" onclick="fecharModalVerVendedor()">&times;</span>
+        <h2 style="text-align: center;">DETALHES DO VENDEDOR</h2>
+        <form id="formVerVendedor" onsubmit="event.preventDefault(); salvarEdicaoVendedor();">
+            <input type="hidden" id="ver_id_admin" />
+            <div class="form-group-inline">
+                <label>Nome</label>
+                <input type="text" id="ver_nome" required />
+                <label>Email</label>
+                <input type="email" id="ver_email" required />
+            </div>
+            <div class="form-group-inline">
+                <label>CPF</label>
+                <input type="text" id="ver_cpf" />
+                <label>RG</label>
+                <input type="text" id="ver_rg" />
+            </div>
+            <div class="form-group-inline">
+                <label>Data Nascimento</label>
+                <input type="date" id="ver_data_nascimento" />
+                <label>Gênero</label>
+                <select id="ver_genero">
+                    <option value="">Selecione</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+            <div class="form-group-inline">
+                <label>Telefone</label>
+                <input type="tel" id="ver_telefone" />
+                <label>Endereço</label>
+                <input type="text" id="ver_endereco" />
+            </div>
+            <div class="form-group-inline">
+                <label>Data Admissão</label>
+                <input type="date" id="ver_data_admissao" />
+                <label>Turno</label>
+                <input type="text" id="ver_turno" />
+            </div>
+            <div class="form-group-inline">
+                <label>Carteira Trabalho</label>
+                <input type="text" id="ver_carteira_trabalho" />
+                <label>Banco</label>
+                <input type="text" id="ver_banco" />
+            </div>
+            <div class="form-group-inline">
+                <label>Agência e Conta</label>
+                <input type="text" id="ver_agencia_conta" />
+            </div>
+            <button type="submit" class="btn btn-salvar" style="margin-top: 15px;">SALVAR ALTERAÇÕES</button>
         </form>
     </div>
 </div>
@@ -257,12 +318,14 @@ require_once APP_PATH . "/config/auth-check.php";
         flex-wrap: wrap;
         gap: 15px;
     }
+
     .form-group-inline label,
     .form-group-inline input,
     .form-group-inline select {
         flex: 1 1 30%;
         min-width: 150px;
     }
+
     .form-group-inline input[type="text"],
     .form-group-inline input[type="email"],
     .form-group-inline input[type="tel"],
@@ -274,6 +337,7 @@ require_once APP_PATH . "/config/auth-check.php";
         border-radius: 4px;
         box-sizing: border-box;
     }
+
     .btn-salvar {
         background-color: #3498db;
     }

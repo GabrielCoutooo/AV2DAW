@@ -40,28 +40,28 @@ try {
     $avarias_detalhe = ($acao === 'ocorrencia' || !empty($itens_nao_ok)) ? ("Avarias/Obs: " . $avarias . " | Itens NÃO OK: " . $itens_nao_ok) : null;
     $acessorios_ok = empty($itens_nao_ok); // Se não houver itens não ok, acessórios estão confirmados
 
-    $sqlVistoria = "INSERT INTO VISTORIA (id_locacao, tipo_vistoria, data_hora, nivel_combustivel, avarias_registradas, acessorios_confirmados)
+    $sqlVistoria = "INSERT INTO vistoria (id_locacao, tipo_vistoria, data_hora, nivel_combustivel, avarias_registradas, acessorios_confirmados)
                     VALUES (?, ?, ?, ?, ?, ?)";
     $stmtVistoria = $con->prepare($sqlVistoria);
-    
+
     // Tipo 'Devolução' para Check-in
     $tipo_vistoria = 'Devolução';
     $stmtVistoria->bind_param('issssi', $id_locacao, $tipo_vistoria, $data_hora_devolucao, $combustivel, $avarias_detalhe, $acessorios_ok);
     $stmtVistoria->execute();
     $stmtVistoria->close();
 
-    // 2. ATUALIZA A LOCAÇÃO
-    $sqlLocacao = "UPDATE LOCACAO SET status = ?, data_hora_real_devolucao = ? WHERE id_locacao = ?";
+    // 2. ATUALIZA A LOCAÇÃO (trigger vai atualizar status_veiculo automaticamente)
+    $sqlLocacao = "UPDATE locacao SET status = ?, data_hora_real_devolucao = ? WHERE id_locacao = ?";
     $stmtLocacao = $con->prepare($sqlLocacao);
     $stmtLocacao->bind_param('ssi', $status_final_locacao, $data_hora_devolucao, $id_locacao);
     $stmtLocacao->execute();
     $stmtLocacao->close();
 
-    // 3. ATUALIZA O VEÍCULO (Quilometragem e Disponibilidade)
-    $sqlVeiculo = "UPDATE VEICULO V
-                   JOIN LOCACAO L ON V.id_veiculo = L.id_veiculo
-                   SET V.quilometragem_atual = ?, V.disponivel = 1
-                   WHERE L.id_locacao = ?";
+    // 3. ATUALIZA O VEÍCULO (Quilometragem - trigger já cuida do status_veiculo)
+    $sqlVeiculo = "UPDATE veiculo v
+                   JOIN locacao l ON v.id_veiculo = l.id_veiculo
+                   SET v.quilometragem_atual = ?, v.disponivel = 1
+                   WHERE l.id_locacao = ?";
     $stmtVeiculo = $con->prepare($sqlVeiculo);
     $stmtVeiculo->bind_param('ii', $km, $id_locacao);
     $stmtVeiculo->execute();
@@ -70,12 +70,11 @@ try {
     $con->commit();
     $con->close();
 
-    $msg = ($acao === 'ocorrencia' || !empty($itens_nao_ok)) ? 
-           "Check-in concluído. Vistoria registrada com OCORRÊNCIA." : 
-           "Check-in e devolução finalizados com sucesso.";
-    
-    echo json_encode(['success' => true, 'message' => $msg]);
+    $msg = ($acao === 'ocorrencia' || !empty($itens_nao_ok)) ?
+        "Check-in concluído. Vistoria registrada com OCORRÊNCIA." :
+        "Check-in e devolução finalizados com sucesso.";
 
+    echo json_encode(['success' => true, 'message' => $msg]);
 } catch (Exception $e) {
     $con->rollback();
     $con->close();
@@ -83,4 +82,3 @@ try {
     http_response_code(500);
     echo json_encode(['success' => false, 'error' => "Erro no Check-in. Erro interno: " . $e->getMessage()]);
 }
-?>

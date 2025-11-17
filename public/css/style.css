@@ -143,8 +143,7 @@ body {
 
 /* ===== BANNER PRINCIPAL ===== */
 .banner-principal {
-    background: linear-gradient(135deg, rgba(20, 20, 40, 0.8) 0%, rgba(80, 20, 40, 0.8) 100%), 
-                url('../images/hero-bg.jpg');
+    background: linear-gradient(135deg, rgba(20, 20, 40, 0.8) 0%, rgba(80, 20, 40, 0.8) 100%);
     background-size: cover;
     background-position: center;
     padding: 8rem 2rem;
@@ -213,22 +212,6 @@ body {
     color: #333;
 }
 
-.linha-formulario {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.linha-formulario input[type="radio"] {
-    cursor: pointer;
-}
-
-.label-radio {
-    margin: 0;
-    cursor: pointer;
-    font-weight: normal;
-}
-
 .entrada-formulario {
     width: 100%;
     padding: 0.7rem;
@@ -241,15 +224,6 @@ body {
     outline: none;
     border-color: #00bfff;
     box-shadow: 0 0 5px rgba(0, 191, 255, 0.3);
-}
-
-.entrada-pesquisa {
-    width: 100%;
-    padding: 0.7rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    color: #999;
 }
 
 .botao-busca {
@@ -339,12 +313,6 @@ body {
 
 .link-footer:hover {
     color: #00bfff;
-}
-
-.icone-rede {
-    color: #ff3333;
-    font-weight: bold;
-    margin-left: 0.3rem;
 }
 
 .footer-bottom {
@@ -559,7 +527,7 @@ body {
     position: relative;
     width: 100%;
 }
-.input-com-icone input { /**/
+.input-com-icone input {
     padding-right: 40px; 
     box-sizing: border-box; 
     width: 100%;
@@ -693,6 +661,19 @@ body {
   padding-bottom: 5px;
 }
 
+.radio-tratamento {
+  display: flex;
+  gap: 15px;
+}
+
+.radio-tratamento label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
 .linha-campos {
   display: flex;
   flex-wrap: wrap;
@@ -776,6 +757,11 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
+}
+
+.carros-nav {
+    display: flex;
+    gap: 8px;
 }
 
 .carros-header h2 {

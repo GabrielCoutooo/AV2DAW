@@ -71,10 +71,10 @@ function abrirModalEdicao(veiculo) {
     }
   });
 
-  // Setar o status
-  const disponivelSelect = form.querySelector('select[name="disponivel"]');
-  if (disponivelSelect) {
-    disponivelSelect.value = veiculo.disponivel ? "1" : "0";
+  // Setar o status do veículo
+  const statusSelect = form.querySelector('select[name="status_veiculo"]');
+  if (statusSelect) {
+    statusSelect.value = veiculo.status_veiculo || "Disponível";
   }
 
   // Armazenar o ID do veículo sendo editado em uma variável global
@@ -135,7 +135,7 @@ function abrirModalCadastroVendedor() {
   const modal = document.getElementById("modalCadastroVendedor");
   if (!modal) return;
   document.getElementById("formCadastroVendedor").reset();
-  document.getElementById("msg-cadastro-vendedor").textContent = '';
+  document.getElementById("msg-cadastro-vendedor").textContent = "";
   modal.style.display = "flex";
 }
 
@@ -143,6 +143,103 @@ function fecharModalCadastroVendedor() {
   const modal = document.getElementById("modalCadastroVendedor");
   if (!modal) return;
   modal.style.display = "none";
+}
+
+function abrirModalVerVendedor(idAdmin) {
+  fetch(`../../public/api/adm/vendedores.php?id_admin=${idAdmin}`)
+    .then((r) => r.json())
+    .then((j) => {
+      if (!j.success || !j.admin) {
+        alert("Vendedor não encontrado.");
+        return;
+      }
+      const a = j.admin;
+      const modal = document.getElementById("modalVerVendedor");
+      if (!modal) return;
+      document.getElementById("ver_nome").value = a.nome || "";
+      document.getElementById("ver_email").value = a.email || "";
+      document.getElementById("ver_cpf").value = a.cpf || "";
+      document.getElementById("ver_rg").value = a.rg || "";
+      document.getElementById("ver_data_nascimento").value =
+        a.data_nascimento || "";
+      document.getElementById("ver_genero").value = a.genero || "";
+      document.getElementById("ver_telefone").value = a.telefone || "";
+      document.getElementById("ver_endereco").value = a.endereco || "";
+      document.getElementById("ver_data_admissao").value =
+        a.data_admissao || "";
+      document.getElementById("ver_turno").value = a.turno || "";
+      document.getElementById("ver_carteira_trabalho").value =
+        a.carteira_trabalho || "";
+      document.getElementById("ver_banco").value = a.banco || "";
+      document.getElementById("ver_agencia_conta").value =
+        a.agencia_conta || "";
+      document.getElementById("ver_id_admin").value = a.id_admin;
+      modal.style.display = "flex";
+    })
+    .catch((e) => alert("Erro ao carregar vendedor."));
+}
+
+function fecharModalVerVendedor() {
+  const modal = document.getElementById("modalVerVendedor");
+  if (!modal) return;
+  modal.style.display = "none";
+}
+
+function salvarEdicaoVendedor() {
+  const id = parseInt(document.getElementById("ver_id_admin").value, 10);
+  const payload = {
+    id_admin: id,
+    nome: document.getElementById("ver_nome").value.trim(),
+    email: document.getElementById("ver_email").value.trim(),
+    cpf: document.getElementById("ver_cpf").value.trim(),
+    rg: document.getElementById("ver_rg").value.trim(),
+    data_nascimento: document.getElementById("ver_data_nascimento").value,
+    genero: document.getElementById("ver_genero").value,
+    telefone: document.getElementById("ver_telefone").value.trim(),
+    endereco: document.getElementById("ver_endereco").value.trim(),
+    data_admissao: document.getElementById("ver_data_admissao").value,
+    turno: document.getElementById("ver_turno").value.trim(),
+    carteira_trabalho: document
+      .getElementById("ver_carteira_trabalho")
+      .value.trim(),
+    banco: document.getElementById("ver_banco").value.trim(),
+    agencia_conta: document.getElementById("ver_agencia_conta").value.trim(),
+  };
+  fetch("../../public/api/adm/vendedores.php", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  })
+    .then((r) => r.json())
+    .then((j) => {
+      if (j.success) {
+        alert("Vendedor atualizado!");
+        fecharModalVerVendedor();
+        carregarDados();
+      } else {
+        alert(j.error || "Falha ao atualizar.");
+      }
+    })
+    .catch((e) => alert("Erro de rede."));
+}
+
+function excluirVendedor(idAdmin) {
+  if (!confirm("Deseja realmente excluir este vendedor?")) return;
+  fetch("../../public/api/adm/vendedores.php", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id_admin: idAdmin }),
+  })
+    .then((r) => r.json())
+    .then((j) => {
+      if (j.success) {
+        alert("Vendedor excluído!");
+        carregarDados();
+      } else {
+        alert(j.error || "Falha ao excluir.");
+      }
+    })
+    .catch((e) => alert("Erro de rede."));
 }
 
 // ============ EVENT LISTENERS PARA OS FORMULÁRIOS ============
@@ -160,7 +257,65 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Formulário de Cadastro
+  // Formulário de Cadastro de Vendedor
+  const formCadastroVendedor = document.getElementById("formCadastroVendedor");
+  if (formCadastroVendedor) {
+    formCadastroVendedor.addEventListener("submit", function (e) {
+      e.preventDefault();
+      function getValue(id) {
+        const el = document.getElementById(id);
+        return el ? (el.value ? el.value.trim() : "") : "";
+      }
+      const senha = getValue("senha");
+      const confirmar = getValue("confirmar_senha");
+      const msg = document.getElementById("msg-cadastro-vendedor");
+
+      if (senha !== confirmar) {
+        msg.textContent = "As senhas não coincidem";
+        return;
+      }
+
+      const payload = {
+        nome: getValue("nome"),
+        email: getValue("email"),
+        senha: senha,
+        cpf: getValue("cpf"),
+        rg: getValue("rg"),
+        data_nascimento: getValue("data_nascimento"),
+        genero: getValue("genero"),
+        telefone: getValue("telefone"),
+        endereco: getValue("endereco"),
+        data_admissao: getValue("data_admissao"),
+        turno: getValue("turno"),
+        carteira_trabalho: getValue("carteira_trabalho"),
+        banco: getValue("banco"),
+        agencia_conta: getValue("agencia_conta"),
+      };
+
+      fetch("../../public/api/adm/vendedores.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+        .then((r) => r.json())
+        .then((j) => {
+          if (j.success) {
+            alert("Vendedor cadastrado com sucesso!");
+            fecharModalCadastroVendedor();
+            formCadastroVendedor.reset();
+            carregarDados();
+          } else {
+            msg.textContent = j.error || "Erro ao cadastrar";
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          msg.textContent = "Erro na requisição";
+        });
+    });
+  }
+
+  // Formulário de Cadastro de Veículo
   const formCadastro = document.getElementById("formCadastroVeiculo");
   if (formCadastro) {
     formCadastro.addEventListener("submit", async function (e) {
@@ -259,54 +414,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Formulário de Cadastro de Vendedor
-  const formCadastroVendedor = document.getElementById("formCadastroVendedor");
-  if (formCadastroVendedor) {
-    formCadastroVendedor.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-      const msgEl = document.getElementById("msg-cadastro-vendedor");
-      msgEl.textContent = 'Processando...';
-      
-      const senha = formData.get('senha');
-      const confirmaSenha = formData.get('confirmar_senha');
-      
-      if (senha !== confirmaSenha) {
-        msgEl.style.color = 'red';
-        msgEl.textContent = 'Erro: As senhas não coincidem!';
-        return;
-      }
-      
-      formData.append("acao", "cadastrar");
-      
-      try {
-        const response = await fetch("/AV2DAW/views/adm/cadastrar_admin.php", {
-          method: "POST",
-          body: formData,
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-          msgEl.style.color = 'green';
-          msgEl.textContent = "Vendedor cadastrado com sucesso! Use a senha inicial.";
-          
-          setTimeout(() => {
-            fecharModalCadastroVendedor();
-            document.dispatchEvent(new Event("atualizarDashboard"));
-          }, 1500);
-        } else {
-          msgEl.style.color = 'red';
-          msgEl.textContent = "Erro: " + (result.error || result.message || "Erro desconhecido.");
-        }
-      } catch (err) {
-        console.error("Erro ao cadastrar vendedor:", err);
-        msgEl.style.color = 'red';
-        msgEl.textContent = "Erro de comunicação com o servidor.";
-      }
-    });
-  }
-
   // Carrega os dados do dashboard
   carregarDashboard();
 });
@@ -316,8 +423,23 @@ function renderFrota(veiculos, container) {
   container.innerHTML = "";
 
   veiculos.forEach((veiculo) => {
-    const disponivelText = veiculo.disponivel ? "Disponível" : "Indisponível";
-    const disponivelColor = veiculo.disponivel ? "#27ae60" : "#e74c3c";
+    const statusText = veiculo.status_veiculo || "Disponível";
+    let statusColor = "#95a5a6"; // cinza padrão
+
+    switch (statusText) {
+      case "Disponível":
+        statusColor = "#27ae60"; // verde
+        break;
+      case "Alugado":
+        statusColor = "#3498db"; // azul
+        break;
+      case "Manutenção":
+        statusColor = "#f39c12"; // laranja
+        break;
+      case "Indisponível":
+        statusColor = "#e74c3c"; // vermelho
+        break;
+    }
 
     const imagem =
       veiculo.imagem && veiculo.imagem.trim() !== ""
@@ -331,8 +453,8 @@ function renderFrota(veiculos, container) {
         <img src="${imagem}" alt="${veiculo.modelo}" class="veiculo-img">
         <h3>${veiculo.marca} ${veiculo.modelo}</h3>
         <p>${veiculo.categoria}</p>
-        <span style="color: ${disponivelColor};">
-          ${disponivelText}
+        <span style="color: ${statusColor}; font-weight: bold;">
+          ${statusText}
         </span>
       </div>
       <button class="btn btn-primary btn-editar" data-id="${veiculo.id_veiculo}">Editar</button>
@@ -352,12 +474,16 @@ function renderVendedores(vendedores, container) {
     const row = `
       <tr>
         <td>${vendedor.nome}</td>
-        <td>${vendedor.contato}</td>
+        <td>${vendedor.email || vendedor.contato || "undefined"}</td>
         <td>${vendedor.turno}</td>
-        <td>${vendedor.ultimo_modelo}</td>
+        <td>${vendedor.ultimo_modelo || "undefined"}</td>
         <td>
-          <button class="btn btn-primary">VER MAIS</button>
-          <button class="btn" style="background-color: #e74c3c; color: white;">EXCLUIR</button>
+          <button class="btn btn-primary" onclick="abrirModalVerVendedor(${
+            vendedor.id_admin
+          })">VER MAIS</button>
+          <button class="btn" style="background-color: #e74c3c; color: white;" onclick="excluirVendedor(${
+            vendedor.id_admin
+          })">EXCLUIR</button>
         </td>
       </tr>
     `;
@@ -371,11 +497,14 @@ function renderChecklists(checklists, container) {
     // Determine se a locação está PRÉ (Reservado) ou PÓS (Devolvido)
     // Se o status é Reservado, a ação é iniciar a Retirada (Check-out)
     // Se o status é PÓS/Devolvido, a ação é a Vistoria de Devolução (Check-in)
-    const acaoTexto = checklist.tipo === 'PRÉ' ? 'Abrir Check-out' : 'Abrir Check-in';
-    
+    const acaoTexto =
+      checklist.tipo === "PRÉ" ? "Processar Retirada" : "Abrir Check-in";
+    const acaoFuncao =
+      checklist.tipo === "PRÉ" ? "processarRetirada" : "abrirCheckin";
+
     // O seu Check-in/Vistoria lida com o ID da locação.
     const idLocacao = checklist.id_locacao;
-    
+
     const row = `
       <tr>
         <td>${checklist.doc_cliente}</td>
@@ -383,7 +512,7 @@ function renderChecklists(checklists, container) {
         <td>${checklist.data}</td>
         <td>${checklist.tipo}</td>
         <td>
-          <button class="btn btn-success" onclick="abrirCheckin(${idLocacao})">
+          <button class="btn btn-success" onclick="${acaoFuncao}(${idLocacao})">
             ${acaoTexto}
           </button>
         </td>
@@ -478,11 +607,58 @@ document.addEventListener("atualizarDashboard", carregarDashboard);
 // ============ FUNÇÕES DE CHECK-IN E CHECK-OUT ============
 function abrirCheckin(idLocacao) {
   if (!idLocacao) {
-    alert('ID da locação inválido.');
+    alert("ID da locação inválido.");
     return;
   }
-  // Redireciona para a página de check-in
-  window.location.href = `../adm/checkin.php?id_locacao=${encodeURIComponent(idLocacao)}`;
+  window.location.href = `../adm/checkin.php?id_locacao=${encodeURIComponent(
+    idLocacao
+  )}`;
+}
+
+async function processarRetirada(idLocacao) {
+  if (!idLocacao) {
+    alert("ID da locação inválido.");
+    return;
+  }
+
+  if (
+    !confirm(
+      "Confirmar retirada do veículo? O status será alterado para ALUGADO."
+    )
+  ) {
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append("id_locacao", idLocacao);
+
+    const response = await fetch(
+      "/AV2DAW/public/api/adm/processar_retirada.php",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert(result.message || "Check-out realizado com sucesso!");
+      carregarDashboard();
+    } else {
+      alert("Erro: " + (result.error || "Erro ao processar retirada"));
+    }
+  } catch (error) {
+    console.error("Erro:", error);
+    alert("Erro ao processar retirada.");
+  }
+}
+
+// Expõe funções no escopo global para uso em atributos onclick
+if (typeof window !== "undefined") {
+  window.processarRetirada = processarRetirada;
+  window.abrirCheckin = abrirCheckin;
 }
 
 function abrirCheckout(idLocacao) {
@@ -493,7 +669,9 @@ function abrirCheckout(idLocacao) {
 
 // ============ FUNÇÕES DE AÇÃO EM MASSA ============
 function acaoEmMassa(acao) {
-  const checkboxes = document.querySelectorAll('input[name="veiculoSelecionado"]:checked');
+  const checkboxes = document.querySelectorAll(
+    'input[name="veiculoSelecionado"]:checked'
+  );
   const idsSelecionados = Array.from(checkboxes).map((cb) => cb.value);
 
   if (idsSelecionados.length === 0) {
@@ -564,7 +742,9 @@ function aplicarFiltros() {
 
   // Atualizar a URL com os parâmetros de filtro
   const url = new URL(window.location);
-  Object.keys(filtros).forEach((key) => url.searchParams.set(key, filtros[key]));
+  Object.keys(filtros).forEach((key) =>
+    url.searchParams.set(key, filtros[key])
+  );
   window.history.pushState({}, "", url);
 
   // Recarregar o dashboard com os novos filtros

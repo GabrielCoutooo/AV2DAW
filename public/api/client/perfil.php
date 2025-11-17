@@ -22,11 +22,11 @@ if ($id_cliente <= 0) {
     exit;
 }
 
-$sql = "SELECT nome, email, telefone, cpf, endereco FROM CLIENTE WHERE id_cliente = ? LIMIT 1";
+$sql = "SELECT nome, email, telefone, cpf, endereco FROM cliente WHERE id_cliente = ? LIMIT 1";
 $stmt = $con->prepare($sql);
 if (!$stmt) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Erro interno: '. $con->error]);
+    echo json_encode(['success' => false, 'error' => 'Erro interno: ' . $con->error]);
     exit;
 }
 $stmt->bind_param('i', $id_cliente);

@@ -198,7 +198,7 @@ require_once APP_PATH . '/config/auth-check.php';
         </figure>
         <nav class="menu">
             <a href="index.php">Dashboard</a>
-            <a href="vendas.php">Vender</a>
+            <a href="vendas.html">Vender</a>
             <a href="../../public/logout.php" style="background-color: #e74c3c;">Sair</a>
         </nav>
     </header>

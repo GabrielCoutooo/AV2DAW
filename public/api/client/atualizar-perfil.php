@@ -33,17 +33,17 @@ if ($id_cliente <= 0 || $nome === '' || $email === '') {
     exit;
 }
 
-$sql = "UPDATE CLIENTE SET nome = ?, email = ?, telefone = ?, endereco = ? WHERE id_cliente = ?";
+$sql = "UPDATE cliente SET nome = ?, email = ?, telefone = ?, endereco = ? WHERE id_cliente = ?";
 $stmt = $con->prepare($sql);
 if (!$stmt) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Erro ao preparar consulta: '.$con->error]);
+    echo json_encode(['success' => false, 'error' => 'Erro ao preparar consulta: ' . $con->error]);
     exit;
 }
 $stmt->bind_param('ssssi', $nome, $email, $telefone, $endereco, $id_cliente);
 if (!$stmt->execute()) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Erro ao atualizar perfil: '.$stmt->error]);
+    echo json_encode(['success' => false, 'error' => 'Erro ao atualizar perfil: ' . $stmt->error]);
     exit;
 }
 $stmt->close();

@@ -1,139 +1,90 @@
-# AV2DAW - Projeto com Padrão MVC
+# AV2DAW – Sistema de Locação de Veículos
 
-Projeto referente à AV2 da disciplina de 3DAW com implementação do padrão arquitetural Model-View-Controller (MVC).
+Este projeto é uma solução completa para gestão de locação de veículos, desenvolvido para a disciplina de 3DAW. Ele utiliza PHP, MySQL, HTML, CSS e JavaScript, com organização modular e APIs RESTful para integração entre frontend e backend.
+
+## Visão Geral
+
+O sistema permite:
+
+- Cadastro, autenticação e gerenciamento de administradores e clientes
+- Cadastro e gerenciamento de veículos, categorias e filiais
+- Processo de locação, devolução, check-in/check-out e controle de status dos veículos
+- Registro de ocorrências, promoções e pagamentos
+- Interface administrativa e área do cliente, com painéis, formulários e modais interativos
 
 ## Estrutura do Projeto
 
 ```
 AV2DAW/
-├── app/                          # Código da aplicação
-│   ├── controllers/              # Controllers (lógica de controle)
-│   │   └── Controller.php        # Classe base Controller
-│   ├── models/                   # Models (lógica de dados)
-│   │   └── Model.php             # Classe base Model
-│   └── views/                    # Views (apresentação)
-│       ├── home.php              # Página inicial
-│       └── 404.php               # Página de erro 404
-├── config/                       # Configurações
-│   └── config.php                # Configuração de banco de dados
-├── public/                       # Arquivos públicos (raiz do servidor web)
-│   ├── index.php                 # Front Controller (ponto de entrada)
-│   ├── css/                      # Folhas de estilo
-│   │   └── style.css
-│   ├── js/                       # Scripts JavaScript
-│   │   └── script.js
-│   └── images/                   # Imagens
-├── Alucar.sql                    # Script do banco de dados
-├── .htaccess                     # Reescrita de URLs (Apache)
-└── README.md                     # Este arquivo
+├── config/           # Configurações e conexão com o banco
+├── public/           # Arquivos públicos (index, APIs, assets)
+│   ├── api/          # Endpoints REST (adm e client)
+│   ├── css/          # Estilos
+│   ├── js/           # Scripts JavaScript
+│   └── images/       # Imagens e uploads
+├── views/            # Páginas HTML/PHP (admin e cliente)
+├── Alucar.sql        # Script de criação e popularização do banco
+├── README.md         # Este arquivo
 ```
 
-## Como Usar
+## Instalação e Uso
 
-### 1. Configurar Banco de Dados
+1. **Banco de Dados**
 
-Editar `config/config.php` com suas credenciais:
-```php
-$host = 'localhost';
-$user = 'seu_usuario';
-$password = 'sua_senha';
-$database = 'alucar';
-```
+   - Importe o arquivo `Alucar.sql` em seu MySQL/MariaDB.
+   - O banco será criado com todas as tabelas, índices, triggers e dados de exemplo.
 
-Importar o arquivo `Alucar.sql` no banco de dados.
+2. **Configuração**
 
-### 2. Acessar a Aplicação
+   - Edite `config/config.php` com as credenciais do seu banco de dados.
+   - Ajuste `BASE_URL` se necessário para refletir o caminho do seu servidor local.
 
-```
-http://localhost/AV2DAW/public/index.php
-```
+3. **Execução**
+   - Acesse via navegador:  
+      `http://localhost/AV2DAW/public/`
+   - O sistema está pronto para uso, com áreas separadas para administradores e clientes.
 
-Ou com reescrita de URLs habilitada:
-```
-http://localhost/AV2DAW/public/
-```
+## Funcionalidades Principais
 
-### 3. Criar um Controller
+- **Administração**
 
-Exemplo em `app/controllers/HomeController.php`:
-```php
-<?php
-require_once APP_ROOT . '/app/controllers/Controller.php';
+  - Cadastro e login de administradores
+  - Gerenciamento de veículos, categorias, filiais e vendedores
+  - Painel de controle com visão geral das locações e status dos veículos
+  - CRUD completo via modais e formulários dinâmicos
 
-class HomeController extends Controller {
-    public function index() {
-        $data = [
-            'title' => 'Home'
-        ];
-        $this->render('home', $data);
-    }
-}
-?>
-```
+- **Cliente**
 
-### 4. Criar um Model
+  - Cadastro, login e atualização de perfil
+  - Consulta de veículos disponíveis, simulação e realização de locações
+  - Pagamento, acompanhamento de reservas e registro de ocorrências
 
-Exemplo em `app/models/User.php`:
-```php
-<?php
-require_once APP_ROOT . '/app/models/Model.php';
+- **APIs REST**
 
-class User extends Model {
-    protected $table = 'usuarios';
-    
-    public function getUserByEmail($email) {
-        return $this->query("SELECT * FROM {$this->table} WHERE email = ?", [$email]);
-    }
-}
-?>
-```
+  - Endpoints organizados em `public/api/adm/` e `public/api/client/`
+  - Retorno sempre em JSON, com tratamento robusto de erros
 
-### 5. Criar uma View
+- **Banco de Dados**
+  - Estrutura relacional completa, com triggers para sincronização automática de status
+  - Tabelas para admin, cliente, veículo, locação, pagamento, promoção, entre outras
 
-As views são incluídas em `app/views/` e podem usar variáveis passadas pelo controller:
-```php
-<?php
-// $title está disponível na view se foi passada pelo controller
-?>
-<h1><?php echo $title; ?></h1>
-```
+## Tecnologias Utilizadas
 
-## Componentes Principais
+- **Backend:** PHP 7+ (procedural e orientado a objetos)
+- **Frontend:** HTML5, CSS3, JavaScript puro
+- **Banco de Dados:** MySQL/MariaDB
+- **Extras:** Triggers SQL, autenticação por sessão, tratamento de erros global
 
-### Model
-- Gerencia toda a lógica de dados
-- Realiza operações no banco de dados
-- Herda da classe base `Model`
+## Organização dos Códigos
 
-### View
-- Responsável pela apresentação
-- Contém HTML e PHP para exibição
-- Recebe dados do Controller
+- **config/**: Parâmetros de conexão, constantes globais e sessão segura
+- **public/api/**: Lógica de negócio exposta via endpoints RESTful
+- **public/js/**: Scripts para interatividade, validação e requisições AJAX
+- **views/**: Interfaces para administradores e clientes, separadas por contexto
+- **Alucar.sql**: Criação e popularização do banco, incluindo triggers e exemplos
 
-### Controller
-- Gerencia a lógica da aplicação
-- Comunica entre Model e View
-- Processa requisições do usuário
-- Herda da classe base `Controller`
+## Créditos
 
-## Arquivos Importantes
+Desenvolvido por Gabriel Couto e Jefferson Souza para a disciplina de 3DAW.
 
-| Arquivo | Descrição |
-|---------|-----------|
-| `public/index.php` | Front Controller - ponto de entrada |
-| `config/config.php` | Configurações e conexão BD |
-| `app/controllers/Controller.php` | Classe base para controllers |
-| `app/models/Model.php` | Classe base para models |
-| `.htaccess` | Reescrita de URLs |
-
-## Tecnologias
-
-- PHP 7.0+
-- MySQL
-- HTML5
-- CSS3
-- JavaScript
-
-## Autor
-
-Gabriel Couto e Jefferson Souza
+---
