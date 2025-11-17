@@ -145,7 +145,7 @@
 
         .modal {
             background: #fff;
-            width: 30vw;
+            width: 42vw;
             max-width: 98vw;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
@@ -153,7 +153,7 @@
             margin: 0 auto;
             position: relative;
             top: 40px;
-            max-height: 55vh;
+            max-height: 60vh;
         }
 
         .modal header {
@@ -270,8 +270,6 @@
                 <div class="field">
                     <label for="idVeiculo">ID do veículo</label>
                     <input id="idVeiculo" type="number" placeholder="Ex.: 12" />
-                    <div class="hint">Dica: você também pode acessar esta página com <code>?id=12</code> para ir
-                        direto.</div>
                 </div>
                 <div class="actions">
                     <button class="btn btn-primary" id="btnContinuar">Continuar</button>
@@ -397,8 +395,6 @@
                 const id = btn.getAttribute('data-select');
                 document.getElementById('idVeiculo').value = id;
                 mdBackdrop.style.display = 'none';
-                // opcional: já redirecionar
-                // go(id);
             });
         })();
     </script>
